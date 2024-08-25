@@ -1,0 +1,34 @@
+spring:
+  application:
+    name: cineinfo
+  profiles:
+    include: mysql, kofic, jw
+  thymeleaf:
+    # thymeleaf 에 대한 캐시 남기지 않기.
+    cache: false
+    # templates 디렉토리 체크. 파일이 없으면 에러 발생.
+    check-template-location: true
+  jpa:
+    hibernate:
+      # 엔티티를 보고 자동으로 DDL 문 만들지
+      ddl-auto: create
+    # SQL 쿼리문 보여주도록 설정
+    show-sql: true
+    properties:
+      hibernate:
+        # 한줄로 나오는 쿼리문 이쁘게 보여주기
+        format_sql: true
+        # 복잡한 쿼리를 사용하게 되면, IN QUERY 로 바꿔서 한번에 SELECT 해 가져오기
+        default_batch_fetch_size: 100
+
+
+# 디버그 로그 활성화 할껀지
+debug: false
+
+# 로그 레벨 설정
+logging:
+  level:
+    com.cineinfo.v1: debug
+    # 파라미터 바인딩 ? 로 나오는 것들 보이도록 설정
+    org.hibernate.type.descriptor.sql.BasicBinder: trace
+
