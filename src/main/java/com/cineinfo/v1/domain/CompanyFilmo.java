@@ -1,11 +1,17 @@
 package com.cineinfo.v1.domain;
 
 import jakarta.persistence.*;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
 
-@Entity(name = "company_filmo")
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@Comment("영화사 필모그래피")
+@Entity(name = "company_filmo")
 public class CompanyFilmo {
 
     @Id
