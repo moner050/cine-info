@@ -4,15 +4,13 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.Comment;
+
+import java.util.Objects;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Comment("영화의 영화사 정보")
 @Entity(name = "movie_companies")
 public class MovieCompanies {
@@ -26,4 +24,22 @@ public class MovieCompanies {
     @ManyToOne(optional = false)
     @JoinColumn(name = "company_cd")
     private CompanyInfo companyInfo;
+
+    @Builder
+    public MovieCompanies(MovieInfo movieInfo, CompanyInfo companyInfo) {
+        this.movieInfo = movieInfo;
+        this.companyInfo = companyInfo;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof MovieCompanies movieCompanies)) return false;
+        return movieInfo != null && companyInfo != null && movieInfo.equals(movieCompanies.movieInfo) && companyInfo.equals(movieCompanies.companyInfo);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(movieInfo, companyInfo);
+    }
 }
