@@ -3,15 +3,13 @@ package com.cineinfo.v1.domain;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.Comment;
+
+import java.util.Objects;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Comment("공통코드")
 @Entity(name = "com_code")
 public class ComCode {
@@ -30,7 +28,26 @@ public class ComCode {
     private String korNm;
 
     @Comment("영어명")
-    @Column(name = "eng_nm", nullable = false, length = 200)
+    @Column(name = "eng_nm", length = 200)
     private String engNm;
 
+    @Builder
+    public ComCode(String fullCd, String summaryCd, String korNm, String engNm) {
+        this.fullCd = fullCd;
+        this.summaryCd = summaryCd;
+        this.korNm = korNm;
+        this.engNm = engNm;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ComCode comCode)) return false;
+        return fullCd != null && fullCd.equals(comCode.fullCd);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(fullCd);
+    }
 }
