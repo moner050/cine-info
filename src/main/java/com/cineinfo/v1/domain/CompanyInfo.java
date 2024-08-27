@@ -4,14 +4,15 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
 
+import java.util.Objects;
+
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Comment("영화사 정보")
 @Entity(name = "company_info")
 public class CompanyInfo {
@@ -37,4 +38,24 @@ public class CompanyInfo {
     @Column(name = "company_part_names", length = 3000)
     private String companyPartNames;
 
+    @Builder
+    public CompanyInfo(String companyCd, String companyNm, String companyNmEn, String ceoNm, String companyPartNames) {
+        this.companyCd = companyCd;
+        this.companyNm = companyNm;
+        this.companyNmEn = companyNmEn;
+        this.ceoNm = ceoNm;
+        this.companyPartNames = companyPartNames;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof CompanyInfo companyInfo)) return false;
+        return companyCd != null && companyCd.equals(companyInfo.companyCd);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(companyCd);
+    }
 }
