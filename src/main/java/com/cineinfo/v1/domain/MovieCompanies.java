@@ -1,9 +1,6 @@
 package com.cineinfo.v1.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.Comment;
 
@@ -15,13 +12,16 @@ import java.util.Objects;
 @Entity(name = "movie_companies")
 public class MovieCompanies {
 
-    @Id
+    @EmbeddedId
+    private MovieCompaniesKey id;
+
     @ManyToOne(optional = false)
+    @MapsId("movieCd")
     @JoinColumn(name = "movie_cd")
     private MovieInfo movieInfo;
 
-    @Id
     @ManyToOne(optional = false)
+    @MapsId("companyCd")
     @JoinColumn(name = "company_cd")
     private CompanyInfo companyInfo;
 
