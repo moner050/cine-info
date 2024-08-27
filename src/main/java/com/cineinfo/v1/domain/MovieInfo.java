@@ -4,14 +4,15 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
 
+import java.util.Objects;
+
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Comment("영화 정보")
 @Entity(name = "movie_info")
 public class MovieInfo {
@@ -65,4 +66,31 @@ public class MovieInfo {
     @Column(name = "director_people_nms", length = 200)
     private String directorPeopleNms;
 
+    @Builder
+    public MovieInfo(String movieCd, String movieNm, String movieNmEn, String prdtYear, String openDt, String typeNm, String prdtStatNm, String nationAlt, String genreAlt, String repNationNm, String repGenreNm, String directorPeopleNms) {
+        this.movieCd = movieCd;
+        this.movieNm = movieNm;
+        this.movieNmEn = movieNmEn;
+        this.prdtYear = prdtYear;
+        this.openDt = openDt;
+        this.typeNm = typeNm;
+        this.prdtStatNm = prdtStatNm;
+        this.nationAlt = nationAlt;
+        this.genreAlt = genreAlt;
+        this.repNationNm = repNationNm;
+        this.repGenreNm = repGenreNm;
+        this.directorPeopleNms = directorPeopleNms;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof MovieInfo movieInfo)) return false;
+        return movieCd != null && movieCd.equals(movieInfo.movieCd);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(movieCd);
+    }
 }
