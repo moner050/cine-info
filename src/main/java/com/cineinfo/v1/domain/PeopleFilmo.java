@@ -2,14 +2,15 @@ package com.cineinfo.v1.domain;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
 
+import java.util.Objects;
+
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Comment("영화인 필모그래피")
 @Entity(name = "people_filmo")
 public class PeopleFilmo {
@@ -34,4 +35,24 @@ public class PeopleFilmo {
     @Comment("참여분야")
     @Column(name = "movie_part_nm", length = 50)
     private String moviePartNm;
+
+    @Builder
+    public PeopleFilmo(MovieInfo movieInfo, MoviePeople moviePeople, String movieNm, String moviePartNm) {
+        this.movieInfo = movieInfo;
+        this.moviePeople = moviePeople;
+        this.movieNm = movieNm;
+        this.moviePartNm = moviePartNm;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof PeopleFilmo peopleFilmo)) return false;
+        return id != null && id.equals(peopleFilmo.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }
