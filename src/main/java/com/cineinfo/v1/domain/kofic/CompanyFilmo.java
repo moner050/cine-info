@@ -1,4 +1,4 @@
-package com.cineinfo.v1.domain;
+package com.cineinfo.v1.domain.kofic;
 
 import jakarta.persistence.*;
 import lombok.*;
