@@ -11,7 +11,7 @@ spring:
   jpa:
     hibernate:
       # 엔티티를 보고 자동으로 DDL 문 만들지
-      ddl-auto: create
+      ddl-auto: create-drop
     # SQL 쿼리문 보여주도록 설정
     show-sql: true
     properties:
@@ -28,13 +28,7 @@ debug: false
 # 로그 레벨 설정
 logging:
   level:
-    com.cineinfo.v1: DEBUG
     # 파라미터 바인딩 ? 로 나오는 것들 보이도록 설정
-    org:
-      hibernate:
-        sql: DEBUG
-        type:
-          descriptor:
-            sql:
-              BasicBinder: TRACE
+    org.hibernate.sql: DEBUG
+    org.hibernate.type: TRACE
 
