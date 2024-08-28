@@ -1,19 +1,24 @@
 package com.cineinfo.v1.client;
 
+import com.cineinfo.v1.dto.kofic.request.SearchCodeListReq;
+import com.cineinfo.v1.dto.kofic.request.SearchMovieListReq;
+import com.cineinfo.v1.dto.kofic.response.SearchCodeListRes;
 import com.cineinfo.v1.dto.kofic.response.SearchMovieListRes;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.*;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriComponentsBuilder;
-
-import java.net.URI;
 
 @Slf4j
 @Component
 public class KOFICClient {
+
+    private final RestTemplate restTemplate;
+
+    public KOFICClient(RestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
+    }
 
     /******************************** application-kofic 에 설정된 값 불러오기 ************************************/
 
@@ -54,36 +59,24 @@ public class KOFICClient {
     @Value("${kofic.url.searchWeeklyBoxOfficeList}")
     public void setWeeklyBoxOfficeList(String searchWeeklyBoxOfficeList) {weeklyBoxOfficeList = searchWeeklyBoxOfficeList;}
 
+    // 공통 코드 조회
+    public SearchCodeListRes searchCodeList(String comCode) {
+        RestTemplateClient restTemplateClient = new RestTemplateClient();
+        SearchCodeListReq searchCodeListReq = new SearchCodeListReq(comCode);
+
+        ParameterizedTypeReference<SearchCodeListRes> responseType = new ParameterizedTypeReference<SearchCodeListRes>() {};
+
+        return restTemplateClient.getSearchResponse(responseType, searchCodeListReq.toMultiValueMap(), (prefixUrl + codeList), koficKey, restTemplate);
+    }
 
     // 영화 목록 조회
     public SearchMovieListRes searchMovieList(String curPage, String openStartDt) {
-        URI uri = UriComponentsBuilder.fromUriString(prefixUrl + movieList)
-                .queryParam("key", koficKey)
-                .queryParam("curPage", curPage)
-                .queryParam("itemPerPage", 100)
-                .queryParam("openStartDt", openStartDt)
-                .build().encode().toUri();
+        RestTemplateClient restTemplateClient = new RestTemplateClient();
+        SearchMovieListReq searchMovieListReq = new SearchMovieListReq(curPage, "100", openStartDt);
 
-        log.info("uri : " + uri.toString());
-
-        // header 에 api 키값을 더해준다.
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-
-        // responseType 을 SearchMovieListRes 로 담아준다.
         ParameterizedTypeReference<SearchMovieListRes> responseType = new ParameterizedTypeReference<SearchMovieListRes>() {};
 
-        // httpEntity 에 headers 의 내용을 담아준다.
-        HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
-
-        // RestTemplate 로 결과값을 받아온다.
-        ResponseEntity<SearchMovieListRes> searchMovieListRestTemplate = new RestTemplate().exchange(
-                uri,
-                HttpMethod.GET,
-                httpEntity,
-                responseType
-        );
-
-        return searchMovieListRestTemplate.getBody();
+        return restTemplateClient.getSearchResponse(responseType, searchMovieListReq.toMultiValueMap(), (prefixUrl + movieList), koficKey, restTemplate);
     }
+
 }
