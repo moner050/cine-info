@@ -10,7 +10,7 @@ import java.util.List;
 @AllArgsConstructor
 public class MovieListResultRes {
 
-    private Long totCnt;
+    private Integer totCnt;
     private String source;
     private List<MovieListRes> movieList;
 
