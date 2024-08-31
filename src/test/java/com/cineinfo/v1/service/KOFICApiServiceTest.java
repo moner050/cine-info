@@ -1,6 +1,9 @@
 package com.cineinfo.v1.service;
 
+import com.cineinfo.v1.domain.kofic.ComCode;
 import com.cineinfo.v1.domain.kofic.MovieInfo;
+import com.cineinfo.v1.domain.kofic.constant.SummaryCd;
+import com.cineinfo.v1.repository.kofic.ComCodeRepository;
 import com.cineinfo.v1.repository.kofic.MovieInfoRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -18,6 +21,21 @@ class KOFICApiServiceTest {
     KOFICApiService koficApiService;
     @Autowired
     MovieInfoRepository movieInfoRepository;
+    @Autowired
+    ComCodeRepository comCodeRepository;
+
+    @Test
+    @DisplayName("공통코드 저장")
+    void saveComCode() {
+        // given
+        koficApiService.saveComCode(SummaryCd.COMPANY_PART_CD.getSummaryCd());
+
+        // when
+        List<ComCode> comCodes = comCodeRepository.findBySummaryCd(SummaryCd.COMPANY_PART_CD.getSummaryCd());
+
+        // then
+        Assertions.assertThat(comCodes).isNotNull();
+    }
 
     @Test
     @DisplayName("영화 리스트 저장")
