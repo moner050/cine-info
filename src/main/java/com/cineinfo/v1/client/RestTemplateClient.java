@@ -21,6 +21,8 @@ public class RestTemplateClient {
                 .queryParams(multiValueMap)
                 .build().encode().toUri();
 
+        log.info("URI: " + uri);
+
         // RestTemplate 로 결과값을 받아온다.
         ResponseEntity<T> responseEntity = restTemplate.exchange(uri, HttpMethod.GET, null, responseTypeReference);
 
