@@ -3,6 +3,7 @@ package com.cineinfo.v1.dto.kofic.response.movie_list;
 import com.cineinfo.v1.domain.kofic.MovieInfo;
 import lombok.*;
 
+import java.util.Collections;
 import java.util.List;
 
 @Getter
@@ -38,7 +39,19 @@ public class MovieListRes {
                 .genreAlt(movieListRes.getGenreAlt())
                 .repNationNm(movieListRes.getRepNationNm())
                 .repGenreNm(movieListRes.getRepGenreNm())
-                .directorPeopleNms(movieListRes.getDirectors().toString())
+                .directorPeopleNms(listToString(Collections.singletonList(movieListRes.getDirectors())))
+                .companiesNms(listToString(Collections.singletonList(movieListRes.getCompanys())))
                 .build();
+    }
+
+    public static String listToString(List<Object> objects) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < objects.size(); i++) {
+            sb.append(objects.get(i));
+            if(i != objects.size() - 1) {
+                sb.append(", ");
+            }
+        }
+        return sb.toString();
     }
 }
