@@ -2,7 +2,7 @@ spring:
   application:
     name: cineinfo
   profiles:
-    include: mysql, kofic, jw
+    include: mysql, kofic, jw, kmdb
   thymeleaf:
     # thymeleaf 에 대한 캐시 남기지 않기.
     cache: false
