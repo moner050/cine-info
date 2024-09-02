@@ -3,7 +3,6 @@ package com.cineinfo.v1.service;
 import com.cineinfo.v1.client.KOFICClient;
 import com.cineinfo.v1.domain.kofic.ComCode;
 import com.cineinfo.v1.domain.kofic.MovieInfo;
-import com.cineinfo.v1.domain.kofic.constant.SummaryCd;
 import com.cineinfo.v1.dto.kofic.response.SearchCodeListRes;
 import com.cineinfo.v1.dto.kofic.response.SearchMovieListRes;
 import com.cineinfo.v1.dto.kofic.response.comcode.CodesRes;
@@ -27,7 +26,6 @@ public class KOFICApiService {
     private final CompanyInfoRepository companyInfoRepository;
     private final CompanyFilmoRepository companyFilmoRepository;
     private final MovieInfoRepository movieInfoRepository;
-    private final MovieCompaniesRepository movieCompaniesRepository;
     private final MoviePeopleRepository moviePeopleRepository;
     private final PeopleFilmoRepository peopleFilmoRepository;
 
