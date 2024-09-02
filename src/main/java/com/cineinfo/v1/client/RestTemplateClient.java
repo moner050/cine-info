@@ -1,7 +1,6 @@
 package com.cineinfo.v1.client;
 
 
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
@@ -12,7 +11,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.net.URI;
 
 @Slf4j
-@AllArgsConstructor
 public class RestTemplateClient {
 
     public <T> T getSearchResponse(ParameterizedTypeReference<T> responseTypeReference, MultiValueMap<String, String> multiValueMap, String url, String key, RestTemplate restTemplate) {

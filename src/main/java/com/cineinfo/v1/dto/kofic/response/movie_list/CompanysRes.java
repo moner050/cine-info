@@ -10,4 +10,9 @@ public class CompanysRes {
 
     private String companyCd;
     private String companyNm;
+
+    @Override
+    public String toString() {
+        return companyNm;
+    }
 }

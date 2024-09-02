@@ -12,6 +12,6 @@ public class DirectorsRes {
 
     @Override
     public String toString() {
-        return peopleNm + ", ";
+        return peopleNm;
     }
 }

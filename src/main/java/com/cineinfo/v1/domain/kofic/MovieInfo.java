@@ -1,8 +1,6 @@
 package com.cineinfo.v1.domain.kofic;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -63,11 +61,15 @@ public class MovieInfo {
     private String repGenreNm;
 
     @Comment("영화감독명들")
-    @Column(name = "director_people_nms", length = 200)
+    @Column(name = "director_people_nms", length = 1000)
     private String directorPeopleNms;
 
+    @Comment("제작사들")
+    @Column(name = "company_nms", length = 2000)
+    private String companiesNms;
+
     @Builder
-    public MovieInfo(String movieCd, String movieNm, String movieNmEn, String prdtYear, String openDt, String typeNm, String prdtStatNm, String nationAlt, String genreAlt, String repNationNm, String repGenreNm, String directorPeopleNms) {
+    public MovieInfo(String movieCd, String movieNm, String movieNmEn, String prdtYear, String openDt, String typeNm, String prdtStatNm, String nationAlt, String genreAlt, String repNationNm, String repGenreNm, String directorPeopleNms, String companiesNms) {
         this.movieCd = movieCd;
         this.movieNm = movieNm;
         this.movieNmEn = movieNmEn;
@@ -80,6 +82,7 @@ public class MovieInfo {
         this.repNationNm = repNationNm;
         this.repGenreNm = repGenreNm;
         this.directorPeopleNms = directorPeopleNms;
+        this.companiesNms = companiesNms;
     }
 
     @Override
