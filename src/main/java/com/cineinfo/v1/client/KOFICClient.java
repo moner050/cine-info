@@ -23,6 +23,7 @@ public class KOFICClient {
     /******************************** application-kofic 에 설정된 값 불러오기 ************************************/
 
     public static String koficKey;                      //  키값
+    public static String subKey;                        //  임시 키값
     public static String prefixUrl;                     //  기본주소
     public static String codeList;                      //  공통코드
     public static String movieList;                     //  영화목록
@@ -36,8 +37,9 @@ public class KOFICClient {
 
 
     @Value("${kofic.key1}")
-    public void setKoficKey(String key) {
-        koficKey = key;}
+    public void setKoficKey(String key) {koficKey = key;}
+    @Value("${kofic.key2}")
+    public void setSubKey(String key) {subKey = key;}
     @Value("${kofic.url.prefix}")
     public void setPrefixUrl(String prefix) {prefixUrl = prefix;}
     @Value("${kofic.url.searchCodeList}")
