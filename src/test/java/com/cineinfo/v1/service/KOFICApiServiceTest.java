@@ -1,12 +1,12 @@
 package com.cineinfo.v1.service;
 
-import com.cineinfo.v1.domain.kofic.ComCode;
-import com.cineinfo.v1.domain.kofic.CompanyInfo;
-import com.cineinfo.v1.domain.kofic.MovieInfo;
-import com.cineinfo.v1.domain.kofic.constant.SummaryCd;
-import com.cineinfo.v1.repository.kofic.ComCodeRepository;
-import com.cineinfo.v1.repository.kofic.CompanyInfoRepository;
-import com.cineinfo.v1.repository.kofic.MovieInfoRepository;
+import com.cineinfo.v1.domain.kofic.KOFICComCode;
+import com.cineinfo.v1.domain.kofic.KOFICCompanyInfo;
+import com.cineinfo.v1.domain.kofic.KOFICMovieInfo;
+import com.cineinfo.v1.domain.kofic.constant.KOFICSummaryCd;
+import com.cineinfo.v1.repository.kofic.KOFICComCodeRepository;
+import com.cineinfo.v1.repository.kofic.KOFICCompanyInfoRepository;
+import com.cineinfo.v1.repository.kofic.KOFICMovieInfoRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -22,23 +22,23 @@ class KOFICApiServiceTest {
     @Autowired
     KOFICApiService koficApiService;
     @Autowired
-    MovieInfoRepository movieInfoRepository;
+    KOFICMovieInfoRepository KOFICMovieInfoRepository;
     @Autowired
-    ComCodeRepository comCodeRepository;
+    KOFICComCodeRepository KOFICComCodeRepository;
     @Autowired
-    CompanyInfoRepository companyInfoRepository;
+    KOFICCompanyInfoRepository KOFICCompanyInfoRepository;
 
     @Test
     @DisplayName("공통코드 저장")
     void saveComCode() {
         // given
-        koficApiService.saveComCode(SummaryCd.COMPANY_PART_CD.getSummaryCd());
+        koficApiService.saveComCode(KOFICSummaryCd.COMPANY_PART_CD.getSummaryCd());
 
         // when
-        List<ComCode> comCodes = comCodeRepository.findBySummaryCd(SummaryCd.COMPANY_PART_CD.getSummaryCd());
+        List<KOFICComCode> KOFICComCodes = KOFICComCodeRepository.findBySummaryCd(KOFICSummaryCd.COMPANY_PART_CD.getSummaryCd());
 
         // then
-        Assertions.assertThat(comCodes).isNotNull();
+        Assertions.assertThat(KOFICComCodes).isNotNull();
     }
 
     @Test
@@ -48,7 +48,7 @@ class KOFICApiServiceTest {
         koficApiService.saveMovieList("1", "2024");
 
         // when
-        List<MovieInfo> all = movieInfoRepository.findAll();
+        List<KOFICMovieInfo> all = KOFICMovieInfoRepository.findAll();
 
         // then
         Assertions.assertThat(all.size()).isEqualTo(100);
@@ -61,7 +61,7 @@ class KOFICApiServiceTest {
         koficApiService.saveCompanyList("1");
 
         // when
-        List<CompanyInfo> all = companyInfoRepository.findAll();
+        List<KOFICCompanyInfo> all = KOFICCompanyInfoRepository.findAll();
 
         // then
         Assertions.assertThat(all.size()).isEqualTo(100);

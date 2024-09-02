@@ -11,8 +11,8 @@ import java.util.Objects;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Comment("공통코드")
-@Entity(name = "com_code")
-public class ComCode {
+@Entity(name = "kofic_com_code")
+public class KOFICComCode {
 
     @Id
     @Comment("상위코드")
@@ -32,7 +32,7 @@ public class ComCode {
     private String engNm;
 
     @Builder
-    public ComCode(String fullCd, String summaryCd, String korNm, String engNm) {
+    public KOFICComCode(String fullCd, String summaryCd, String korNm, String engNm) {
         this.fullCd = fullCd;
         this.summaryCd = summaryCd;
         this.korNm = korNm;
@@ -42,8 +42,8 @@ public class ComCode {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof ComCode comCode)) return false;
-        return fullCd != null && fullCd.equals(comCode.fullCd);
+        if (!(o instanceof KOFICComCode KOFICComCode)) return false;
+        return fullCd != null && fullCd.equals(KOFICComCode.fullCd);
     }
 
     @Override

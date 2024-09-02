@@ -12,8 +12,8 @@ import java.util.Objects;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Comment("영화인 필모그래피")
-@Entity(name = "people_filmo")
-public class PeopleFilmo {
+@Entity(name = "kofic_people_filmo")
+public class KOFICPeopleFilmo {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,11 +22,11 @@ public class PeopleFilmo {
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "movie_cd")
-    private MovieInfo movieInfo;
+    private KOFICMovieInfo movieInfo;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "people_cd")
-    private MoviePeople moviePeople;
+    private KOFICMoviePeople moviePeople;
 
     @Comment("영화명")
     @Column(name = "movie_nm", nullable = false, length = 200)
@@ -37,9 +37,9 @@ public class PeopleFilmo {
     private String moviePartNm;
 
     @Builder
-    public PeopleFilmo(MovieInfo movieInfo, MoviePeople moviePeople, String movieNm, String moviePartNm) {
-        this.movieInfo = movieInfo;
-        this.moviePeople = moviePeople;
+    public KOFICPeopleFilmo(KOFICMovieInfo KOFICMovieInfo, KOFICMoviePeople KOFICMoviePeople, String movieNm, String moviePartNm) {
+        this.movieInfo = KOFICMovieInfo;
+        this.moviePeople = KOFICMoviePeople;
         this.movieNm = movieNm;
         this.moviePartNm = moviePartNm;
     }
@@ -47,8 +47,8 @@ public class PeopleFilmo {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof PeopleFilmo peopleFilmo)) return false;
-        return id != null && id.equals(peopleFilmo.id);
+        if (!(o instanceof KOFICPeopleFilmo KOFICPeopleFilmo)) return false;
+        return id != null && id.equals(KOFICPeopleFilmo.id);
     }
 
     @Override

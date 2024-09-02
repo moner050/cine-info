@@ -2,7 +2,7 @@ package com.cineinfo.v1.domain.kofic.constant;
 
 import lombok.Getter;
 
-public enum SummaryCd {
+public enum KOFICSummaryCd {
 
     WIDE_AREA_CD("지역코드", "0105000000"),
     MOVIE_TYPE_CD("영화유형코드", "2201"),
@@ -12,7 +12,7 @@ public enum SummaryCd {
     @Getter private final String description;
     @Getter private final String summaryCd;
 
-    SummaryCd(String description, String summaryCd) {
+    KOFICSummaryCd(String description, String summaryCd) {
         this.description = description;
         this.summaryCd = summaryCd;
     }

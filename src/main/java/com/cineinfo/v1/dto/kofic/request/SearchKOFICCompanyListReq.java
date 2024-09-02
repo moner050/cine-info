@@ -8,13 +8,15 @@ import org.springframework.util.MultiValueMap;
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class SearchCodeListReq {
+public class SearchKOFICCompanyListReq {
 
-    private String comCode;
+    private String curPage;
+    private String itemPerPage;
 
     public MultiValueMap<String, String> toMultiValueMap() {
         MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
-        map.add("comCode", comCode);
+        map.add("curPage", curPage);
+        map.add("itemPerPage", itemPerPage);
         return map;
     }
 }

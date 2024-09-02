@@ -1,6 +1,6 @@
 package com.cineinfo.v1.dto.kofic.response.company_list;
 
-import com.cineinfo.v1.domain.kofic.CompanyInfo;
+import com.cineinfo.v1.domain.kofic.KOFICCompanyInfo;
 import lombok.*;
 
 @Getter
@@ -16,8 +16,8 @@ public class CompanyListRes {
     private String ceoNm;
 //    private String filmoNames;
 
-    public static CompanyInfo toEntity(CompanyListRes companyListRes) {
-        return CompanyInfo.builder()
+    public static KOFICCompanyInfo toEntity(CompanyListRes companyListRes) {
+        return KOFICCompanyInfo.builder()
                 .companyCd(companyListRes.getCompanyCd())
                 .companyNm(companyListRes.getCompanyNm())
                 .companyNmEn(companyListRes.getCompanyNmEn())

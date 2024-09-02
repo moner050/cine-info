@@ -9,7 +9,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class SearchCodeListRes {
+public class SearchKOFICCodeListRes {
 
     private List<CodesRes> codes;
 }

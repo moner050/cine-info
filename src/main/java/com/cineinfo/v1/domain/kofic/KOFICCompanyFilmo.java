@@ -9,8 +9,8 @@ import java.util.Objects;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Comment("영화사 필모그래피")
-@Entity(name = "company_filmo")
-public class CompanyFilmo {
+@Entity(name = "kofic_company_filmo")
+public class KOFICCompanyFilmo {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,12 +20,12 @@ public class CompanyFilmo {
     @Comment("영화사 코드")
     @ManyToOne(optional = false)
     @JoinColumn(name = "company_cd")
-    private CompanyInfo companyInfo;
+    private KOFICCompanyInfo companyInfo;
 
     @Comment("영화코드")
     @ManyToOne(optional = false)
     @JoinColumn(name = "movie_cd")
-    private MovieInfo movieInfo;
+    private KOFICMovieInfo movieInfo;
 
     @Comment("영화명")
     @Column(name = "movie_nm", nullable = false, length = 200)
@@ -36,9 +36,9 @@ public class CompanyFilmo {
     private String companyPartNm;
 
     @Builder
-    public CompanyFilmo(CompanyInfo companyInfo, MovieInfo movieInfo, String movieNm, String companyPartNm) {
-        this.companyInfo = companyInfo;
-        this.movieInfo = movieInfo;
+    public KOFICCompanyFilmo(KOFICCompanyInfo KOFICCompanyInfo, KOFICMovieInfo KOFICMovieInfo, String movieNm, String companyPartNm) {
+        this.companyInfo = KOFICCompanyInfo;
+        this.movieInfo = KOFICMovieInfo;
         this.movieNm = movieNm;
         this.companyPartNm = companyPartNm;
     }
@@ -46,8 +46,8 @@ public class CompanyFilmo {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof CompanyFilmo companyFilmo)) return false;
-        return id != null && id.equals(companyFilmo.id);
+        if (!(o instanceof KOFICCompanyFilmo KOFICCompanyFilmo)) return false;
+        return id != null && id.equals(KOFICCompanyFilmo.id);
     }
 
     @Override

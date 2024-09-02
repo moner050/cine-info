@@ -11,8 +11,8 @@ import java.util.Objects;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Comment("영화인 정보")
-@Entity(name = "movie_people")
-public class MoviePeople {
+@Entity(name = "kofic_movie_people")
+public class KOFICMoviePeople {
 
     @Id
     @Column(name = "people_cd", length = 8)
@@ -39,7 +39,7 @@ public class MoviePeople {
     private String hompages;
 
     @Builder
-    public MoviePeople(String peopleCd, String peopleNm, String peopleNmEn, String sex, String repRoleNm, String hompages) {
+    public KOFICMoviePeople(String peopleCd, String peopleNm, String peopleNmEn, String sex, String repRoleNm, String hompages) {
         this.peopleCd = peopleCd;
         this.peopleNm = peopleNm;
         this.peopleNmEn = peopleNmEn;
@@ -51,8 +51,8 @@ public class MoviePeople {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof MoviePeople moviePeople)) return false;
-        return peopleCd != null && peopleCd.equals(moviePeople.peopleCd);
+        if (!(o instanceof KOFICMoviePeople KOFICMoviePeople)) return false;
+        return peopleCd != null && peopleCd.equals(KOFICMoviePeople.peopleCd);
     }
 
     @Override

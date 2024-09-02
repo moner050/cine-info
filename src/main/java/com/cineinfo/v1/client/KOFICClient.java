@@ -1,11 +1,11 @@
 package com.cineinfo.v1.client;
 
-import com.cineinfo.v1.dto.kofic.request.SearchCodeListReq;
-import com.cineinfo.v1.dto.kofic.request.SearchCompanyListReq;
-import com.cineinfo.v1.dto.kofic.request.SearchMovieListReq;
-import com.cineinfo.v1.dto.kofic.response.SearchCodeListRes;
-import com.cineinfo.v1.dto.kofic.response.SearchCompanyListRes;
-import com.cineinfo.v1.dto.kofic.response.SearchMovieListRes;
+import com.cineinfo.v1.dto.kofic.request.SearchKOFICCodeListReq;
+import com.cineinfo.v1.dto.kofic.request.SearchKOFICCompanyListReq;
+import com.cineinfo.v1.dto.kofic.request.SearchKOFICMovieListReq;
+import com.cineinfo.v1.dto.kofic.response.SearchKOFICCodeListRes;
+import com.cineinfo.v1.dto.kofic.response.SearchKOFICCompanyListRes;
+import com.cineinfo.v1.dto.kofic.response.SearchKOFICMovieListRes;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
@@ -64,31 +64,31 @@ public class KOFICClient {
     public void setWeeklyBoxOfficeList(String searchWeeklyBoxOfficeList) {weeklyBoxOfficeList = searchWeeklyBoxOfficeList;}
 
     // 공통 코드 조회
-    public SearchCodeListRes searchCodeList(String comCode) {
+    public SearchKOFICCodeListRes searchCodeList(String comCode) {
         RestTemplateClient restTemplateClient = new RestTemplateClient();
-        SearchCodeListReq searchCodeListReq = new SearchCodeListReq(comCode);
+        SearchKOFICCodeListReq searchCodeListReq = new SearchKOFICCodeListReq(comCode);
 
-        ParameterizedTypeReference<SearchCodeListRes> responseType = new ParameterizedTypeReference<SearchCodeListRes>() {};
+        ParameterizedTypeReference<SearchKOFICCodeListRes> responseType = new ParameterizedTypeReference<SearchKOFICCodeListRes>() {};
 
         return restTemplateClient.getSearchResponse(responseType, searchCodeListReq.toMultiValueMap(), (prefixUrl + codeList), koficKey, restTemplate);
     }
 
     // 영화 목록 조회
-    public SearchMovieListRes searchMovieList(String curPage, String openStartDt) {
+    public SearchKOFICMovieListRes searchMovieList(String curPage, String openStartDt) {
         RestTemplateClient restTemplateClient = new RestTemplateClient();
-        SearchMovieListReq searchMovieListReq = new SearchMovieListReq(curPage, "100", openStartDt);
+        SearchKOFICMovieListReq searchMovieListReq = new SearchKOFICMovieListReq(curPage, "100", openStartDt);
 
-        ParameterizedTypeReference<SearchMovieListRes> responseType = new ParameterizedTypeReference<SearchMovieListRes>() {};
+        ParameterizedTypeReference<SearchKOFICMovieListRes> responseType = new ParameterizedTypeReference<SearchKOFICMovieListRes>() {};
 
         return restTemplateClient.getSearchResponse(responseType, searchMovieListReq.toMultiValueMap(), (prefixUrl + movieList), koficKey, restTemplate);
     }
 
     // 영화사 목록 조회
-    public SearchCompanyListRes searchCompanyList(String curPage) {
+    public SearchKOFICCompanyListRes searchCompanyList(String curPage) {
         RestTemplateClient restTemplateClient = new RestTemplateClient();
-        SearchCompanyListReq searchCompanyListReq = new SearchCompanyListReq(curPage, "100");
+        SearchKOFICCompanyListReq searchCompanyListReq = new SearchKOFICCompanyListReq(curPage, "100");
 
-        ParameterizedTypeReference<SearchCompanyListRes> responseType = new ParameterizedTypeReference<SearchCompanyListRes>() {};
+        ParameterizedTypeReference<SearchKOFICCompanyListRes> responseType = new ParameterizedTypeReference<SearchKOFICCompanyListRes>() {};
 
         return restTemplateClient.getSearchResponse(responseType, searchCompanyListReq.toMultiValueMap(), (prefixUrl + companyList), koficKey, restTemplate);
     }

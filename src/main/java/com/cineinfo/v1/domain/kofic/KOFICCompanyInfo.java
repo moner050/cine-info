@@ -14,8 +14,8 @@ import java.util.Objects;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Comment("영화사 정보")
-@Entity(name = "company_info")
-public class CompanyInfo {
+@Entity(name = "kofic_company_info")
+public class KOFICCompanyInfo {
 
     @Id
     @Comment("영화사 코드")
@@ -39,7 +39,7 @@ public class CompanyInfo {
     private String companyPartNames;
 
     @Builder
-    public CompanyInfo(String companyCd, String companyNm, String companyNmEn, String ceoNm, String companyPartNames) {
+    public KOFICCompanyInfo(String companyCd, String companyNm, String companyNmEn, String ceoNm, String companyPartNames) {
         this.companyCd = companyCd;
         this.companyNm = companyNm;
         this.companyNmEn = companyNmEn;
@@ -50,8 +50,8 @@ public class CompanyInfo {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof CompanyInfo companyInfo)) return false;
-        return companyCd != null && companyCd.equals(companyInfo.companyCd);
+        if (!(o instanceof KOFICCompanyInfo KOFICCompanyInfo)) return false;
+        return companyCd != null && companyCd.equals(KOFICCompanyInfo.companyCd);
     }
 
     @Override

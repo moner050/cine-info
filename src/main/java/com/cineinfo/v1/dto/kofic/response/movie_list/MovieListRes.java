@@ -1,9 +1,8 @@
 package com.cineinfo.v1.dto.kofic.response.movie_list;
 
-import com.cineinfo.v1.domain.kofic.MovieInfo;
+import com.cineinfo.v1.domain.kofic.KOFICMovieInfo;
 import lombok.*;
 
-import java.util.Collections;
 import java.util.List;
 
 @Getter
@@ -26,8 +25,8 @@ public class MovieListRes {
     private List<DirectorsRes> directors;
     private List<CompanysRes> companys;
 
-    public static MovieInfo toEntity(MovieListRes movieListRes) {
-        return MovieInfo.builder()
+    public static KOFICMovieInfo toEntity(MovieListRes movieListRes) {
+        return KOFICMovieInfo.builder()
                 .movieCd(movieListRes.getMovieCd())
                 .movieNm(movieListRes.getMovieNm())
                 .movieNmEn(movieListRes.getMovieNmEn())

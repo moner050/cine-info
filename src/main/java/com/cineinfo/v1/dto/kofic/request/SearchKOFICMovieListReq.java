@@ -8,15 +8,17 @@ import org.springframework.util.MultiValueMap;
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class SearchCompanyListReq {
+public class SearchKOFICMovieListReq {
 
     private String curPage;
     private String itemPerPage;
+    private String openStartDt;
 
     public MultiValueMap<String, String> toMultiValueMap() {
         MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
         map.add("curPage", curPage);
         map.add("itemPerPage", itemPerPage);
+        map.add("openStartDt", openStartDt);
         return map;
     }
 }

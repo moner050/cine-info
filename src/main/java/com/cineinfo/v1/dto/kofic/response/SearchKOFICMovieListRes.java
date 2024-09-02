@@ -7,7 +7,7 @@ import lombok.*;
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class SearchMovieListRes {
+public class SearchKOFICMovieListRes {
 
     private MovieListResultRes movieListResult;
 }

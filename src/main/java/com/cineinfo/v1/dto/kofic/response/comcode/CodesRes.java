@@ -1,6 +1,6 @@
 package com.cineinfo.v1.dto.kofic.response.comcode;
 
-import com.cineinfo.v1.domain.kofic.ComCode;
+import com.cineinfo.v1.domain.kofic.KOFICComCode;
 import lombok.*;
 
 @Getter
@@ -13,8 +13,8 @@ public class CodesRes {
     private String korNm;
     private String engNm;
 
-    public static ComCode toEntity(CodesRes codesRes, String summaryCd) {
-        return ComCode.builder()
+    public static KOFICComCode toEntity(CodesRes codesRes, String summaryCd) {
+        return KOFICComCode.builder()
                 .fullCd(codesRes.getFullCd())
                 .summaryCd(summaryCd)
                 .korNm(codesRes.getKorNm())

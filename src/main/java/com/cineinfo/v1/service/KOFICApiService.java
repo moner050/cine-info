@@ -1,12 +1,12 @@
 package com.cineinfo.v1.service;
 
 import com.cineinfo.v1.client.KOFICClient;
-import com.cineinfo.v1.domain.kofic.ComCode;
-import com.cineinfo.v1.domain.kofic.CompanyInfo;
-import com.cineinfo.v1.domain.kofic.MovieInfo;
-import com.cineinfo.v1.dto.kofic.response.SearchCodeListRes;
-import com.cineinfo.v1.dto.kofic.response.SearchCompanyListRes;
-import com.cineinfo.v1.dto.kofic.response.SearchMovieListRes;
+import com.cineinfo.v1.domain.kofic.KOFICComCode;
+import com.cineinfo.v1.domain.kofic.KOFICCompanyInfo;
+import com.cineinfo.v1.domain.kofic.KOFICMovieInfo;
+import com.cineinfo.v1.dto.kofic.response.SearchKOFICCodeListRes;
+import com.cineinfo.v1.dto.kofic.response.SearchKOFICCompanyListRes;
+import com.cineinfo.v1.dto.kofic.response.SearchKOFICMovieListRes;
 import com.cineinfo.v1.dto.kofic.response.comcode.CodesRes;
 import com.cineinfo.v1.dto.kofic.response.company_list.CompanyListRes;
 import com.cineinfo.v1.dto.kofic.response.movie_list.MovieListRes;
@@ -25,25 +25,25 @@ import java.util.List;
 public class KOFICApiService {
 
     private final KOFICClient koficClient;
-    private final ComCodeRepository comCodeRepository;
-    private final CompanyInfoRepository companyInfoRepository;
-    private final CompanyFilmoRepository companyFilmoRepository;
-    private final MovieInfoRepository movieInfoRepository;
-    private final MoviePeopleRepository moviePeopleRepository;
-    private final PeopleFilmoRepository peopleFilmoRepository;
+    private final KOFICComCodeRepository KOFICComCodeRepository;
+    private final KOFICCompanyInfoRepository KOFICCompanyInfoRepository;
+    private final KOFICCompanyFilmoRepository KOFICCompanyFilmoRepository;
+    private final KOFICMovieInfoRepository KOFICMovieInfoRepository;
+    private final KOFICMoviePeopleRepository KOFICMoviePeopleRepository;
+    private final KOFICPeopleFilmoRepository KOFICPeopleFilmoRepository;
 
     // 공통 코드 저장
     @Transactional
     public boolean saveComCode(String summary) {
         int count = 0;
-        SearchCodeListRes searchCodeList = koficClient.searchCodeList(summary);
+        SearchKOFICCodeListRes searchCodeList = koficClient.searchCodeList(summary);
         List<CodesRes> codes = searchCodeList.getCodes();
 
         for (CodesRes code : codes) {
-            ComCode entity = CodesRes.toEntity(code, summary);
+            KOFICComCode entity = CodesRes.toEntity(code, summary);
 
-            if (!comCodeRepository.existsById(entity.getFullCd())) {
-                comCodeRepository.save(entity);
+            if (!KOFICComCodeRepository.existsById(entity.getFullCd())) {
+                KOFICComCodeRepository.save(entity);
                 count++;
             }
         }
@@ -60,14 +60,14 @@ public class KOFICApiService {
 //        int totCnt = getMovieListTotCnt(openStartDt);
 
 //        for (int i = 1; i <= totCnt; i++) {
-            SearchMovieListRes searchMovieList = koficClient.searchMovieList(curPage, openStartDt);
+            SearchKOFICMovieListRes searchMovieList = koficClient.searchMovieList(curPage, openStartDt);
             List<MovieListRes> movieListRes = searchMovieList.getMovieListResult().getMovieList();
 
             for (MovieListRes movie : movieListRes) {
-                MovieInfo entity = MovieListRes.toEntity(movie);
+                KOFICMovieInfo entity = MovieListRes.toEntity(movie);
 
-                if (!movieInfoRepository.existsById(entity.getMovieCd())) {
-                    movieInfoRepository.save(entity);
+                if (!KOFICMovieInfoRepository.existsById(entity.getMovieCd())) {
+                    KOFICMovieInfoRepository.save(entity);
                     count++;
                 }
             }
@@ -81,14 +81,14 @@ public class KOFICApiService {
     public boolean saveCompanyList(String curPage) {
         int count = 0;
 
-        SearchCompanyListRes searchCompanyList = koficClient.searchCompanyList(curPage);
+        SearchKOFICCompanyListRes searchCompanyList = koficClient.searchCompanyList(curPage);
         List<CompanyListRes> companyList = searchCompanyList.getCompanyListResult().getCompanyList();
 
         for (CompanyListRes company : companyList) {
-            CompanyInfo entity = CompanyListRes.toEntity(company);
+            KOFICCompanyInfo entity = CompanyListRes.toEntity(company);
 
-            if(!companyInfoRepository.existsById(entity.getCompanyCd())) {
-                companyInfoRepository.save(entity);
+            if(!KOFICCompanyInfoRepository.existsById(entity.getCompanyCd())) {
+                KOFICCompanyInfoRepository.save(entity);
                 count++;
             }
         }
@@ -99,12 +99,12 @@ public class KOFICApiService {
 
 
     public int getMovieListTotCnt(String openStartDt) {
-        SearchMovieListRes searchMovieList = koficClient.searchMovieList("1", openStartDt);
+        SearchKOFICMovieListRes searchMovieList = koficClient.searchMovieList("1", openStartDt);
         return searchMovieList.getMovieListResult().getTotCnt();
     }
 
     public int getCompanyListTotCnt() {
-        SearchCompanyListRes searchCompanyList = koficClient.searchCompanyList("1");
+        SearchKOFICCompanyListRes searchCompanyList = koficClient.searchCompanyList("1");
         return searchCompanyList.getCompanyListResult().getTotCnt();
     }
 }
