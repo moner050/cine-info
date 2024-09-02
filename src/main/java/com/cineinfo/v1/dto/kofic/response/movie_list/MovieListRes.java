@@ -39,15 +39,15 @@ public class MovieListRes {
                 .genreAlt(movieListRes.getGenreAlt())
                 .repNationNm(movieListRes.getRepNationNm())
                 .repGenreNm(movieListRes.getRepGenreNm())
-                .directorPeopleNms(listToString(Collections.singletonList(movieListRes.getDirectors())))
-                .companiesNms(listToString(Collections.singletonList(movieListRes.getCompanys())))
+                .directorPeopleNms(listToString(movieListRes.getDirectors()))
+                .companiesNms(listToString(movieListRes.getCompanys()))
                 .build();
     }
 
-    public static String listToString(List<Object> objects) {
+    public static <T> String listToString(List<T> objects) {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < objects.size(); i++) {
-            sb.append(objects.get(i));
+            sb.append(objects.get(i).toString());
             if(i != objects.size() - 1) {
                 sb.append(", ");
             }
