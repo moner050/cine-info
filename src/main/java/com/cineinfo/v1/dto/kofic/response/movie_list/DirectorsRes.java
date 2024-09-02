@@ -10,8 +10,4 @@ public class DirectorsRes {
 
     private String peopleNm;
 
-    @Override
-    public String toString() {
-        return peopleNm + ", ";
-    }
 }
