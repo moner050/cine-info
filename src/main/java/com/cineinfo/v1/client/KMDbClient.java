@@ -1,6 +1,7 @@
 package com.cineinfo.v1.client;
 
 import com.cineinfo.v1.dto.kmdb.request.SearchKMDbMovieListReq;
+import com.cineinfo.v1.dto.kmdb.response.SearchKMDbMovieListRes;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
