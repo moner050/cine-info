@@ -1,6 +1,9 @@
 package com.cineinfo.v1.dto.kmdb.response.movie_list;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -8,6 +11,7 @@ import lombok.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ResultRes {
 
+    @JsonProperty("DOCID")
     private String DOCID;
     private String movieId;
     private String movieSeq;
@@ -32,12 +36,13 @@ public class ResultRes {
     private String repRatDate;
     private String repRlsDate;
     private RatingsRes ratings;
-    private String keyword;
+    private String keywords;
     private String posters;
     private String stlls;
     private StaffsRes staffs;
     private VodsRes vods;
     private String openThtr;
+    private List<StatRes> stat;
     private String screenArea;
     private String screenCnt;
     private String salesAcc;
@@ -46,9 +51,18 @@ public class ResultRes {
     private String statDate;
     private String themeSong;
     private String soundtrack;
+    @JsonProperty("fLocation")
     private String fLocation;
+    @JsonProperty("Awards1")
     private String awards1;
+    @JsonProperty("Awards2")
     private String awards2;
     private String regDate;
     private String modDate;
+    @JsonProperty("Codes")
+    private CodesRes codes;
+    @JsonProperty("CommCodes")
+    private CommCodesRes commCodes;
+    @JsonProperty("ALIAS")
+    private String alias;
 }

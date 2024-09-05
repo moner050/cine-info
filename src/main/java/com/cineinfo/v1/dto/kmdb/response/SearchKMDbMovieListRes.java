@@ -1,6 +1,7 @@
 package com.cineinfo.v1.dto.kmdb.response;
 
 import com.cineinfo.v1.dto.kmdb.response.movie_list.DataRes;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 import java.util.List;
@@ -11,5 +12,13 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class SearchKMDbMovieListRes {
 
+    @JsonProperty("Query")
+    private String query;
+    @JsonProperty("KMAQuery")
+    private String kmaQuery;
+    @JsonProperty("TotalCount")
+    private Integer totalCount;
+    @JsonProperty("Data")
     private List<DataRes> data;
+
 }
