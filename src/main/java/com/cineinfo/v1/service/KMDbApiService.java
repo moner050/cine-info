@@ -20,6 +20,10 @@ public class KMDbApiService {
     // 영화 상세 정보 검색
     public boolean searchKMDbMovieList (String startCount, String releaseDts, String releaseDte) {
         SearchKMDbMovieListRes searchKMDbMovieList = kmdbClient.searchKMDbMovieList(startCount, releaseDts, releaseDte);
+
+        log.info("TotalCount: " + searchKMDbMovieList.getTotalCount());
+        log.info("data size: " + searchKMDbMovieList.getData().size());
+
         DataRes dataRes = searchKMDbMovieList.getData().get(0);
 
         log.info("TotalCount: " + dataRes.getTotalCount());
@@ -33,10 +37,10 @@ public class KMDbApiService {
         log.info("Awards1: "+ resultRes.getAwards1());
         log.info("Awards2: "+ resultRes.getAwards2());
 
-        // 총 검색 결과가 500개보다 많으면 나머지 호출
+//        // 총 검색 결과가 500개보다 많으면 나머지 호출
 //        if(dataRes.getTotalCount() > 500) {
 //            for (long i = 500; i < dataRes.getTotalCount(); i+=500) {
-//                SearchKMDbMovieListRes searchKMDbMovieList = kmdbClient.searchKMDbMovieList(startCount, releaseDts, releaseDte);
+//                searchKMDbMovieList = kmdbClient.searchKMDbMovieList(String.valueOf(i), releaseDts, releaseDte);
 //            }
 //        }
 
