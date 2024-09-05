@@ -10,7 +10,9 @@ import org.springframework.util.MultiValueMap;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class SearchKMDbMovieListReq {
 
+    private String serviceKey;              // API 서비스 인증키
     private String listCount;               // 통합검색 출력 결과수
+    private String startCount;              // 검색 결과 시작 번호
     private String collection;              // 검색 대상 컬렉션 지정 (kmdb_new2)
     private String detail;                  // 상세정보 출력 여부 (Y or N)
     private String sort;                    // 결과 정렬
@@ -20,7 +22,9 @@ public class SearchKMDbMovieListReq {
 
     public MultiValueMap<String, String> toMultiValueMap() {
         MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
+        map.add("ServiceKey", serviceKey);
         map.add("listCount", listCount);
+        map.add("startCount", startCount);
         map.add("collection", collection);
         map.add("detail", detail);
         map.add("sort", sort);
