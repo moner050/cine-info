@@ -10,11 +10,13 @@ import org.springframework.util.MultiValueMap;
 @AllArgsConstructor
 public class SearchKOFICCompanyListReq {
 
+    private String key;
     private String curPage;
     private String itemPerPage;
 
     public MultiValueMap<String, String> toMultiValueMap() {
         MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
+        map.add("key", key);
         map.add("curPage", curPage);
         map.add("itemPerPage", itemPerPage);
         return map;

@@ -66,31 +66,31 @@ public class KOFICClient {
     // 공통 코드 조회
     public SearchKOFICCodeListRes searchCodeList(String comCode) {
         RestTemplateClient restTemplateClient = new RestTemplateClient();
-        SearchKOFICCodeListReq searchCodeListReq = new SearchKOFICCodeListReq(comCode);
+        SearchKOFICCodeListReq searchCodeListReq = new SearchKOFICCodeListReq(koficKey, comCode);
 
         ParameterizedTypeReference<SearchKOFICCodeListRes> responseType = new ParameterizedTypeReference<SearchKOFICCodeListRes>() {};
 
-        return restTemplateClient.getSearchResponse(responseType, searchCodeListReq.toMultiValueMap(), (prefixUrl + codeList), koficKey, restTemplate);
+        return restTemplateClient.getSearchResponse(responseType, searchCodeListReq.toMultiValueMap(), (prefixUrl + codeList), restTemplate);
     }
 
     // 영화 목록 조회
     public SearchKOFICMovieListRes searchMovieList(String curPage, String openStartDt) {
         RestTemplateClient restTemplateClient = new RestTemplateClient();
-        SearchKOFICMovieListReq searchMovieListReq = new SearchKOFICMovieListReq(curPage, "100", openStartDt);
+        SearchKOFICMovieListReq searchMovieListReq = new SearchKOFICMovieListReq(koficKey, curPage, "100", openStartDt);
 
         ParameterizedTypeReference<SearchKOFICMovieListRes> responseType = new ParameterizedTypeReference<SearchKOFICMovieListRes>() {};
 
-        return restTemplateClient.getSearchResponse(responseType, searchMovieListReq.toMultiValueMap(), (prefixUrl + movieList), koficKey, restTemplate);
+        return restTemplateClient.getSearchResponse(responseType, searchMovieListReq.toMultiValueMap(), (prefixUrl + movieList), restTemplate);
     }
 
     // 영화사 목록 조회
     public SearchKOFICCompanyListRes searchCompanyList(String curPage) {
         RestTemplateClient restTemplateClient = new RestTemplateClient();
-        SearchKOFICCompanyListReq searchCompanyListReq = new SearchKOFICCompanyListReq(curPage, "100");
+        SearchKOFICCompanyListReq searchCompanyListReq = new SearchKOFICCompanyListReq(koficKey, curPage, "100");
 
         ParameterizedTypeReference<SearchKOFICCompanyListRes> responseType = new ParameterizedTypeReference<SearchKOFICCompanyListRes>() {};
 
-        return restTemplateClient.getSearchResponse(responseType, searchCompanyListReq.toMultiValueMap(), (prefixUrl + companyList), koficKey, restTemplate);
+        return restTemplateClient.getSearchResponse(responseType, searchCompanyListReq.toMultiValueMap(), (prefixUrl + companyList), restTemplate);
     }
 
 }
