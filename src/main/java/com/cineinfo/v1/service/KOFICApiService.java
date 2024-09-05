@@ -25,12 +25,12 @@ import java.util.List;
 public class KOFICApiService {
 
     private final KOFICClient koficClient;
-    private final KOFICComCodeRepository KOFICComCodeRepository;
-    private final KOFICCompanyInfoRepository KOFICCompanyInfoRepository;
-    private final KOFICCompanyFilmoRepository KOFICCompanyFilmoRepository;
-    private final KOFICMovieInfoRepository KOFICMovieInfoRepository;
-    private final KOFICMoviePeopleRepository KOFICMoviePeopleRepository;
-    private final KOFICPeopleFilmoRepository KOFICPeopleFilmoRepository;
+    private final KOFICComCodeRepository koficComCodeRepository;
+    private final KOFICCompanyInfoRepository koficCompanyInfoRepository;
+    private final KOFICCompanyFilmoRepository koficCompanyFilmoRepository;
+    private final KOFICMovieInfoRepository koficMovieInfoRepository;
+    private final KOFICMoviePeopleRepository koficMoviePeopleRepository;
+    private final KOFICPeopleFilmoRepository koficPeopleFilmoRepository;
 
     // 공통 코드 저장
     @Transactional
@@ -42,8 +42,8 @@ public class KOFICApiService {
         for (CodesRes code : codes) {
             KOFICComCode entity = CodesRes.toEntity(code, summary);
 
-            if (!KOFICComCodeRepository.existsById(entity.getFullCd())) {
-                KOFICComCodeRepository.save(entity);
+            if (!koficComCodeRepository.existsById(entity.getFullCd())) {
+                koficComCodeRepository.save(entity);
                 count++;
             }
         }
@@ -66,8 +66,8 @@ public class KOFICApiService {
             for (MovieListRes movie : movieListRes) {
                 KOFICMovieInfo entity = MovieListRes.toEntity(movie);
 
-                if (!KOFICMovieInfoRepository.existsById(entity.getMovieCd())) {
-                    KOFICMovieInfoRepository.save(entity);
+                if (!koficMovieInfoRepository.existsById(entity.getMovieCd())) {
+                    koficMovieInfoRepository.save(entity);
                     count++;
                 }
             }
@@ -87,8 +87,8 @@ public class KOFICApiService {
         for (CompanyListRes company : companyList) {
             KOFICCompanyInfo entity = CompanyListRes.toEntity(company);
 
-            if(!KOFICCompanyInfoRepository.existsById(entity.getCompanyCd())) {
-                KOFICCompanyInfoRepository.save(entity);
+            if(!koficCompanyInfoRepository.existsById(entity.getCompanyCd())) {
+                koficCompanyInfoRepository.save(entity);
                 count++;
             }
         }
