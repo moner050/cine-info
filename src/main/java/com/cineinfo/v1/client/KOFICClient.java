@@ -1,11 +1,7 @@
 package com.cineinfo.v1.client;
 
 import com.cineinfo.v1.dto.kofic.request.SearchKOFICCodeListReq;
-import com.cineinfo.v1.dto.kofic.request.SearchKOFICCompanyListReq;
-import com.cineinfo.v1.dto.kofic.request.SearchKOFICMovieListReq;
 import com.cineinfo.v1.dto.kofic.response.SearchKOFICCodeListRes;
-import com.cineinfo.v1.dto.kofic.response.SearchKOFICCompanyListRes;
-import com.cineinfo.v1.dto.kofic.response.SearchKOFICMovieListRes;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
@@ -71,26 +67,6 @@ public class KOFICClient {
         ParameterizedTypeReference<SearchKOFICCodeListRes> responseType = new ParameterizedTypeReference<SearchKOFICCodeListRes>() {};
 
         return restTemplateClient.getSearchResponse(responseType, searchCodeListReq.toMultiValueMap(), (prefixUrl + codeList), restTemplate);
-    }
-
-    // 영화 목록 조회
-    public SearchKOFICMovieListRes searchMovieList(String curPage, String openStartDt) {
-        RestTemplateClient restTemplateClient = new RestTemplateClient();
-        SearchKOFICMovieListReq searchMovieListReq = new SearchKOFICMovieListReq(koficKey, curPage, "100", openStartDt);
-
-        ParameterizedTypeReference<SearchKOFICMovieListRes> responseType = new ParameterizedTypeReference<SearchKOFICMovieListRes>() {};
-
-        return restTemplateClient.getSearchResponse(responseType, searchMovieListReq.toMultiValueMap(), (prefixUrl + movieList), restTemplate);
-    }
-
-    // 영화사 목록 조회
-    public SearchKOFICCompanyListRes searchCompanyList(String curPage) {
-        RestTemplateClient restTemplateClient = new RestTemplateClient();
-        SearchKOFICCompanyListReq searchCompanyListReq = new SearchKOFICCompanyListReq(koficKey, curPage, "100");
-
-        ParameterizedTypeReference<SearchKOFICCompanyListRes> responseType = new ParameterizedTypeReference<SearchKOFICCompanyListRes>() {};
-
-        return restTemplateClient.getSearchResponse(responseType, searchCompanyListReq.toMultiValueMap(), (prefixUrl + companyList), restTemplate);
     }
 
 }
