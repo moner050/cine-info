@@ -34,8 +34,7 @@ public class KMDbMoviePlots {
     private String plotText;
 
     @Builder
-    public KMDbMoviePlots(Long plotId, KMDbMovieInfo kmdbMovieInfo, String plotLang, String plotText) {
-        this.plotId = plotId;
+    public KMDbMoviePlots(KMDbMovieInfo kmdbMovieInfo, String plotLang, String plotText) {
         this.kmdbMovieInfo = kmdbMovieInfo;
         this.plotLang = plotLang;
         this.plotText = plotText;

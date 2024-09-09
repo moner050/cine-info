@@ -47,8 +47,7 @@ public class KMDbMovieStaffs {
     private String staffEtc;
 
     @Builder
-    public KMDbMovieStaffs(Long staffId, KMDbMovieInfo kmdbMovieInfo, String staffNm, String staffEnNm, String staffRoleGroup, String staffRole, String staffEtc) {
-        this.staffId = staffId;
+    public KMDbMovieStaffs(KMDbMovieInfo kmdbMovieInfo, String staffNm, String staffEnNm, String staffRoleGroup, String staffRole, String staffEtc) {
         this.kmdbMovieInfo = kmdbMovieInfo;
         this.staffNm = staffNm;
         this.staffEnNm = staffEnNm;
