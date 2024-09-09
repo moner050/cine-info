@@ -4,9 +4,12 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
+
+import java.util.Objects;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -122,4 +125,47 @@ public class KMDbMovieInfo {
     @Comment("최종수정일")
     @Column(name = "mod_date")
     private String modDate;
+
+    @Builder
+    public KMDbMovieInfo(String movieId, String title, String titleEng, String titleOrg, String prodYear, String nation, String company, String runtime, String genre, String type, String use, String episodes, String ratedYn, String repRateDate, String repRlsDate, String keywords, String salesAcc, String audiAcc, String statSource, String statDate, String themeSong, String soundTrack, String fLocation, String awards1, String awards2, String regDate, String modDate) {
+        this.movieId = movieId;
+        this.title = title;
+        this.titleEng = titleEng;
+        this.titleOrg = titleOrg;
+        this.prodYear = prodYear;
+        this.nation = nation;
+        this.company = company;
+        this.runtime = runtime;
+        this.genre = genre;
+        this.type = type;
+        this.use = use;
+        this.episodes = episodes;
+        this.ratedYn = ratedYn;
+        this.repRateDate = repRateDate;
+        this.repRlsDate = repRlsDate;
+        this.keywords = keywords;
+        this.salesAcc = salesAcc;
+        this.audiAcc = audiAcc;
+        this.statSource = statSource;
+        this.statDate = statDate;
+        this.themeSong = themeSong;
+        this.soundTrack = soundTrack;
+        this.fLocation = fLocation;
+        this.awards1 = awards1;
+        this.awards2 = awards2;
+        this.regDate = regDate;
+        this.modDate = modDate;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof KMDbMovieInfo kmdbMovieInfo)) return false;
+        return movieId != null && movieId.equals(kmdbMovieInfo.movieId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(movieId);
+    }
 }
