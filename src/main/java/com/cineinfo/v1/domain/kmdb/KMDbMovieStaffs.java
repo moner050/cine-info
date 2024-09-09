@@ -2,9 +2,12 @@ package com.cineinfo.v1.domain.kmdb;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
+
+import java.util.Objects;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -42,4 +45,27 @@ public class KMDbMovieStaffs {
     @Comment("스태프 기타")
     @Column(name = "staff_etc", length = 100)
     private String staffEtc;
+
+    @Builder
+    public KMDbMovieStaffs(Long staffId, KMDbMovieInfo kmdbMovieInfo, String staffNm, String staffEnNm, String staffRoleGroup, String staffRole, String staffEtc) {
+        this.staffId = staffId;
+        this.kmdbMovieInfo = kmdbMovieInfo;
+        this.staffNm = staffNm;
+        this.staffEnNm = staffEnNm;
+        this.staffRoleGroup = staffRoleGroup;
+        this.staffRole = staffRole;
+        this.staffEtc = staffEtc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof KMDbMovieStaffs kmdbMovieStaffs)) return false;
+        return staffId != null && staffId.equals(kmdbMovieStaffs.staffId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(staffId);
+    }
 }
