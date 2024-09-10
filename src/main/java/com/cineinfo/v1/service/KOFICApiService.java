@@ -29,7 +29,7 @@ public class KOFICApiService {
         List<CodesRes> codes = searchCodeList.getCodes();
 
         for (CodesRes code : codes) {
-            KOFICComCode entity = CodesRes.toEntity(code, summary);
+            KOFICComCode entity = code.toEntity(summary);
 
             if (!koficComCodeRepository.existsById(entity.getFullCd())) {
                 koficComCodeRepository.save(entity);
