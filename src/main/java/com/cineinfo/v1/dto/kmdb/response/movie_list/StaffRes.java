@@ -1,5 +1,7 @@
 package com.cineinfo.v1.dto.kmdb.response.movie_list;
 
+import com.cineinfo.v1.domain.kmdb.KMDbMovieInfo;
+import com.cineinfo.v1.domain.kmdb.KMDbMovieStaffs;
 import lombok.*;
 
 @Getter
@@ -13,4 +15,15 @@ public class StaffRes {
     private String staffRole;
     private String staffEtc;
     private String staffId;
+
+    public KMDbMovieStaffs toEntity(KMDbMovieInfo kmdbMovieInfo) {
+        return KMDbMovieStaffs.builder()
+                .kmdbMovieInfo(kmdbMovieInfo)
+                .staffNm(staffNm)
+                .staffEnNm(staffEnNm)
+                .staffRoleGroup(staffRoleGroup)
+                .staffRole(staffRole)
+                .staffEtc(staffEtc)
+                .build();
+    }
 }
