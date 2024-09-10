@@ -13,12 +13,12 @@ public class CodesRes {
     private String korNm;
     private String engNm;
 
-    public static KOFICComCode toEntity(CodesRes codesRes, String summaryCd) {
+    public KOFICComCode toEntity(String summaryCd) {
         return KOFICComCode.builder()
-                .fullCd(codesRes.getFullCd())
+                .fullCd(fullCd)
                 .summaryCd(summaryCd)
-                .korNm(codesRes.getKorNm())
-                .engNm(codesRes.getEngNm())
+                .korNm(korNm)
+                .engNm(engNm)
                 .build();
     }
 }
