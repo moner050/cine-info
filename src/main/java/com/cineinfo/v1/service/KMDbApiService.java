@@ -2,16 +2,17 @@ package com.cineinfo.v1.service;
 
 import com.cineinfo.v1.client.KMDbClient;
 import com.cineinfo.v1.domain.kmdb.KMDbMovieInfo;
-import com.cineinfo.v1.domain.kmdb.KMDbMoviePosters;
+import com.cineinfo.v1.domain.kmdb.KMDbMovieStaffs;
 import com.cineinfo.v1.dto.kmdb.response.SearchKMDbMovieListRes;
 import com.cineinfo.v1.dto.kmdb.response.movie_list.DataRes;
 import com.cineinfo.v1.dto.kmdb.response.movie_list.ResultRes;
 import com.cineinfo.v1.repository.kmdb.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -61,7 +62,35 @@ public class KMDbApiService {
             int staffsListSize = resultRes.getStaffs().getStaff().size();
             for (int i = 0; i < staffsListSize; i++) {
                 log.info("staff count : " + (i+1));
-                kmdbMovieStaffsRepository.save(resultRes.getStaffs().getStaff().get(i).toEntity(savedEntity));
+
+                // 스태프가 이미 있으면 기존 스태프 데이터 업데이트
+                Optional<KMDbMovieStaffs> searchStaff = kmdbMovieStaffsRepository
+                        .findByKmdbMovieInfo_MovieIdAndStaffNm(savedEntity.getMovieId(), resultRes.getStaffs().getStaff().get(i).getStaffNm());
+
+                if(searchStaff.isPresent()) {
+                    KMDbMovieStaffs savedMovieStaff = searchStaff.get();
+                    String newRoleGroup = savedMovieStaff.getStaffRoleGroup() + "," + resultRes.getStaffs().getStaff().get(i).getStaffRoleGroup();
+                    String newRole = savedMovieStaff.getStaffRole().isBlank() ? "" : (savedMovieStaff.getStaffRole() + ",");
+                    newRole += resultRes.getStaffs().getStaff().get(i).getStaffRole();
+                    String newEtc = savedMovieStaff.getStaffEtc().isBlank() ? "" : (savedMovieStaff.getStaffEtc() + ",");
+                    newEtc += resultRes.getStaffs().getStaff().get(i).getStaffEtc();
+
+
+                    KMDbMovieStaffs newMovieStaffEntity = KMDbMovieStaffs.builder()
+                            .staffId(savedMovieStaff.getStaffId())
+                            .kmdbMovieInfo(savedEntity)
+                            .staffNm(savedMovieStaff.getStaffNm())
+                            .staffEnNm(savedMovieStaff.getStaffEnNm())
+                            .staffRoleGroup(newRoleGroup)
+                            .staffRole(newRole)
+                            .staffEtc(newEtc)
+                            .build();
+
+                    kmdbMovieStaffsRepository.save(newMovieStaffEntity);
+                }
+                else {
+                    kmdbMovieStaffsRepository.save(resultRes.getStaffs().getStaff().get(i).toEntity(savedEntity));
+                }
             }
 
             String[] posters = resultRes.getPosters().split("\\|");
