@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Getter
@@ -37,8 +38,8 @@ public class ResultRes {
     private String use;
     private String episodes;
     private String ratedYn;
-    private LocalDate repRatDate;
-    private LocalDate repRlsDate;
+    private String repRatDate;
+    private String repRlsDate;
     private RatingsRes ratings;
     private String keywords;
     private String posters;
@@ -61,8 +62,8 @@ public class ResultRes {
     private String awards1;
     @JsonProperty("Awards2")
     private String awards2;
-    private LocalDate regDate;
-    private LocalDate modDate;
+    private String regDate;
+    private String modDate;
     @JsonProperty("Codes")
     private CodesRes codes;
     @JsonProperty("CommCodes")
@@ -85,8 +86,8 @@ public class ResultRes {
                 .purpose(use)
                 .episodes(episodes)
                 .ratedYn(ratedYn)
-                .repRateDate(repRatDate)
-                .repRlsDate(repRlsDate)
+                .repRateDate(LocalDate.parse(repRatDate, DateTimeFormatter.ofPattern("yyyyMMdd")))
+                .repRlsDate(LocalDate.parse(repRlsDate, DateTimeFormatter.ofPattern("yyyyMMdd")))
                 .keywords(keywords)
                 .salesAcc(salesAcc)
                 .audiAcc(audiAcc)
@@ -97,8 +98,8 @@ public class ResultRes {
                 .fLocation(fLocation)
                 .awards1(awards1)
                 .awards2(awards2)
-                .regDate(regDate)
-                .modDate(modDate)
+                .regDate(LocalDate.parse(regDate, DateTimeFormatter.ofPattern("yyyyMMdd")))
+                .modDate(LocalDate.parse(modDate, DateTimeFormatter.ofPattern("yyyyMMdd")))
                 .build();
     }
 
