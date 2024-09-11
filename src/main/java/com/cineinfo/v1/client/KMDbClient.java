@@ -35,9 +35,9 @@ public class KMDbClient {
     /********************************************************************************************************/
 
     // 영화 상세 정보 검색
-    public SearchKMDbMovieListRes searchKMDbMovieList (String startCount, String releaseDts, String releaseDte) {
+    public SearchKMDbMovieListRes searchKMDbMovieList (String startCount, String listCount, String releaseDts, String releaseDte) {
         RestTemplateClient restTemplateClient = new RestTemplateClient();
-        SearchKMDbMovieListReq searchKMDbMovieList = new SearchKMDbMovieListReq(serviceKey, "500", startCount, "kmdb_new2", "Y", "prodYear,0", releaseDts, releaseDte, "y");
+        SearchKMDbMovieListReq searchKMDbMovieList = new SearchKMDbMovieListReq(serviceKey, listCount, startCount, "kmdb_new2", "Y", "prodYear,0", releaseDts, releaseDte, "y");
 
         ParameterizedTypeReference<SearchKMDbMovieListRes> responseType = new ParameterizedTypeReference<SearchKMDbMovieListRes>() {};
 
