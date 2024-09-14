@@ -55,7 +55,7 @@ public class KOFICWeeklyBoxOffice {
 
     @Comment("누적 매출액")
     @Column(name = "sales_acc")
-    private String salesAcc;
+    private Long salesAcc;
 
     @Comment("해당일 관객수")
     @Column(name = "audi_cnt")
@@ -79,7 +79,7 @@ public class KOFICWeeklyBoxOffice {
 
     @Comment("해당일자에 상영된 횟수")
     @Column(name = "show_cnt")
-    private String showCnt;
+    private Integer showCnt;
 
     @Comment("시작 기준일자")
     @Column(name = "start_date_range")
@@ -90,7 +90,7 @@ public class KOFICWeeklyBoxOffice {
     private LocalDate endDateRange;
 
     @Builder
-    public KOFICWeeklyBoxOffice(KOFICWeeklyBoxOfficeId koficWeeklyBoxOfficeId, Integer movieRank, String rankOldAndNew, String repNationCd, KMDbMovieInfo kmdbMovieInfo, Long salesAmt, Double salesShare, Long salesInten, Double salesChange, String salesAcc, Long audiCnt, Long audiInten, Double audiChange, Long audiAcc, Integer scrnCnt, String showCnt, LocalDate startDateRange, LocalDate endDateRange) {
+    public KOFICWeeklyBoxOffice(KOFICWeeklyBoxOfficeId koficWeeklyBoxOfficeId, Integer movieRank, String rankOldAndNew, String repNationCd, KMDbMovieInfo kmdbMovieInfo, Long salesAmt, Double salesShare, Long salesInten, Double salesChange, Long salesAcc, Long audiCnt, Long audiInten, Double audiChange, Long audiAcc, Integer scrnCnt, Integer showCnt, LocalDate startDateRange, LocalDate endDateRange) {
         this.koficWeeklyBoxOfficeId = koficWeeklyBoxOfficeId;
         this.movieRank = movieRank;
         this.rankOldAndNew = rankOldAndNew;
