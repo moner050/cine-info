@@ -1,7 +1,11 @@
 package com.cineinfo.v1.client;
 
 import com.cineinfo.v1.dto.kofic.request.SearchKOFICCodeListReq;
+import com.cineinfo.v1.dto.kofic.request.SearchKOFICDailyBoxOfficeReq;
+import com.cineinfo.v1.dto.kofic.request.SearchKOFICWeeklyBoxOfficeReq;
 import com.cineinfo.v1.dto.kofic.response.SearchKOFICCodeListRes;
+import com.cineinfo.v1.dto.kofic.response.SearchKOFICDailyBoxOfficeRes;
+import com.cineinfo.v1.dto.kofic.response.SearchKOFICWeeklyBoxOfficeRes;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
@@ -30,8 +34,8 @@ public class KOFICClient {
     public static String companyInfo;                   //  영화사 상세정보
     public static String peopleList;                    //  영화인목록
     public static String peopleInfo;                    //  영화인 상세정보
-    public static String dailyBoxOfficeList;            //  영화인 상세정보
-    public static String weeklyBoxOfficeList;           //  영화인 상세정보
+    public static String dailyBoxOfficeList;            //  일별 박스오피스
+    public static String weeklyBoxOfficeList;           //  주간/주말 박스오피스
 
 
     @Value("${kofic.key1}")
@@ -69,4 +73,24 @@ public class KOFICClient {
         return restTemplateClient.getSearchResponse(responseType, searchCodeListReq.toMultiValueMap(), (prefixUrl + codeList), restTemplate);
     }
 
+
+    // 일간 박스오피스 순위 조회
+    public SearchKOFICDailyBoxOfficeRes searchDailyBoxOffice(String targetDt, String repNationCd) {
+        RestTemplateClient restTemplateClient = new RestTemplateClient();
+        SearchKOFICDailyBoxOfficeReq searchKOFICDailyBoxOfficeReq = new SearchKOFICDailyBoxOfficeReq(koficKey, targetDt, repNationCd);
+
+        ParameterizedTypeReference<SearchKOFICDailyBoxOfficeRes> responseType = new ParameterizedTypeReference<SearchKOFICDailyBoxOfficeRes>() {};
+
+        return restTemplateClient.getSearchResponse(responseType, searchKOFICDailyBoxOfficeReq.toMultiValueMap(), (prefixUrl + dailyBoxOfficeList), restTemplate);
+    }
+
+    // 주간 박스오피스 순위 조회
+    public SearchKOFICWeeklyBoxOfficeRes searchWeeklyBoxOffice(String targetDt, String repNationCd, String weekGb) {
+        RestTemplateClient restTemplateClient = new RestTemplateClient();
+        SearchKOFICWeeklyBoxOfficeReq searchWeeklyBoxOfficeReq = new SearchKOFICWeeklyBoxOfficeReq(koficKey, targetDt, repNationCd, weekGb);
+
+        ParameterizedTypeReference<SearchKOFICWeeklyBoxOfficeRes> responseType = new ParameterizedTypeReference<SearchKOFICWeeklyBoxOfficeRes>() {};
+
+        return restTemplateClient.getSearchResponse(responseType, searchWeeklyBoxOfficeReq.toMultiValueMap(), (prefixUrl + weeklyBoxOfficeList), restTemplate);
+    }
 }
