@@ -71,6 +71,14 @@ public class ResultRes {
     @JsonProperty("ALIAS")
     private String alias;
 
+    // 날짜일이 00일인 데이터가 존재해서 00 -> 01 로 바꾸는 메서드 추가
+    public String replaceDate(String date) {
+        if(date.endsWith("00")) {
+            date = date.substring(0, date.length()-2) + "01";
+        }
+        return date;
+    }
+
     public KMDbMovieInfo toEntity() {
         return KMDbMovieInfo.builder()
                 .movieId(DOCID)
@@ -86,20 +94,19 @@ public class ResultRes {
                 .purpose(use)
                 .episodes(episodes)
                 .ratedYn(ratedYn)
-                .repRateDate(LocalDate.parse(repRatDate, DateTimeFormatter.ofPattern("yyyyMMdd")))
-                .repRlsDate(LocalDate.parse(repRlsDate, DateTimeFormatter.ofPattern("yyyyMMdd")))
+                .repRateDate(LocalDate.parse(replaceDate(repRatDate), DateTimeFormatter.ofPattern("yyyyMMdd")))
+                .repRlsDate(LocalDate.parse(replaceDate(repRlsDate), DateTimeFormatter.ofPattern("yyyyMMdd")))
                 .keywords(keywords)
                 .salesAcc(salesAcc)
                 .audiAcc(audiAcc)
                 .statSource(statSouce)
                 .statDate(statDate)
                 .themeSong(themeSong)
-                .soundTrack(soundtrack)
                 .fLocation(fLocation)
                 .awards1(awards1)
                 .awards2(awards2)
-                .regDate(LocalDate.parse(regDate, DateTimeFormatter.ofPattern("yyyyMMdd")))
-                .modDate(LocalDate.parse(modDate, DateTimeFormatter.ofPattern("yyyyMMdd")))
+                .regDate(LocalDate.parse(replaceDate(regDate), DateTimeFormatter.ofPattern("yyyyMMdd")))
+                .modDate(LocalDate.parse(replaceDate(modDate), DateTimeFormatter.ofPattern("yyyyMMdd")))
                 .build();
     }
 
