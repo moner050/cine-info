@@ -28,10 +28,6 @@ public class KOFICDailyBoxOffice {
     @Column(name = "rank_old_and_new", length = 3, nullable = false)
     private String rankOldAndNew;
 
-    @Comment("한국/외국 영화 분류")
-    @Column(name = "rep_nation_cd", length = 1, nullable = false)
-    private String repNationCd;
-
     @Comment("영화 아이디")
     @ManyToOne(optional = true)
     @JoinColumn(name = "movie_id")
@@ -86,11 +82,10 @@ public class KOFICDailyBoxOffice {
     private LocalDate targetDate;
 
     @Builder
-    public KOFICDailyBoxOffice(KOFICDailyBoxOfficeId koficDailyBoxOfficeId, Integer movieRank, String rankOldAndNew, String repNationCd, KMDbMovieInfo kmdbMovieInfo, Long salesAmt, Double salesShare, Long salesInten, Double salesChange, Long salesAcc, Long audiCnt, Long audiInten, Double audiChange, Long audiAcc, Integer scrnCnt, Integer showCnt, LocalDate targetDate) {
+    public KOFICDailyBoxOffice(KOFICDailyBoxOfficeId koficDailyBoxOfficeId, Integer movieRank, String rankOldAndNew, KMDbMovieInfo kmdbMovieInfo, Long salesAmt, Double salesShare, Long salesInten, Double salesChange, Long salesAcc, Long audiCnt, Long audiInten, Double audiChange, Long audiAcc, Integer scrnCnt, Integer showCnt, LocalDate targetDate) {
         this.koficDailyBoxOfficeId = koficDailyBoxOfficeId;
         this.movieRank = movieRank;
         this.rankOldAndNew = rankOldAndNew;
-        this.repNationCd = repNationCd;
         this.kmdbMovieInfo = kmdbMovieInfo;
         this.salesAmt = salesAmt;
         this.salesShare = salesShare;

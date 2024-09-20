@@ -34,12 +34,11 @@ public class WeeklyBoxOfficeListRes {
     private String showCnt;
 
     public KOFICWeeklyBoxOffice toEntity(String repNationCd, String startDate, String endDate, KMDbMovieInfo kmDbMovieInfo) {
-        KOFICWeeklyBoxOfficeId koficWeeklyBoxOfficeId = new KOFICWeeklyBoxOfficeId(movieNm, LocalDate.parse(openDt, DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+        KOFICWeeklyBoxOfficeId koficWeeklyBoxOfficeId = new KOFICWeeklyBoxOfficeId(movieNm, LocalDate.parse(openDt, DateTimeFormatter.ofPattern("yyyy-MM-dd")), repNationCd);
         return KOFICWeeklyBoxOffice.builder()
                 .koficWeeklyBoxOfficeId(koficWeeklyBoxOfficeId)
                 .movieRank(Integer.parseInt(rank))
                 .rankOldAndNew(rankOldAndNew)
-                .repNationCd(repNationCd)
                 .kmdbMovieInfo(kmDbMovieInfo)
                 .salesAmt(Long.parseLong(salesAmt))
                 .salesShare(Double.parseDouble(salesShare))

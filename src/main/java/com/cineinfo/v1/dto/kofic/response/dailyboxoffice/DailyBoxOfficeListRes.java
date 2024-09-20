@@ -34,12 +34,11 @@ public class DailyBoxOfficeListRes {
     private String showCnt;
 
     public KOFICDailyBoxOffice toEntity(String repNationCd, String targetDate, KMDbMovieInfo kmDbMovieInfo) {
-        KOFICDailyBoxOfficeId koficDailyBoxOfficeId = new KOFICDailyBoxOfficeId(movieNm, LocalDate.parse(openDt, DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+        KOFICDailyBoxOfficeId koficDailyBoxOfficeId = new KOFICDailyBoxOfficeId(movieNm, LocalDate.parse(openDt, DateTimeFormatter.ofPattern("yyyy-MM-dd")), repNationCd);
         return KOFICDailyBoxOffice.builder()
                 .koficDailyBoxOfficeId(koficDailyBoxOfficeId)
                 .movieRank(Integer.parseInt(rank))
                 .rankOldAndNew(rankOldAndNew)
-                .repNationCd(repNationCd)
                 .kmdbMovieInfo(kmDbMovieInfo)
                 .salesAmt(Long.parseLong(salesAmt))
                 .salesShare(Double.parseDouble(salesShare))

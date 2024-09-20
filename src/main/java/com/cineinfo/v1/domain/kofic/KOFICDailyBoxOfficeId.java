@@ -26,11 +26,15 @@ public class KOFICDailyBoxOfficeId implements Serializable {
     @Column(name = "open_dt")
     private LocalDate openDt;
 
+    @Comment("한국/외국 영화 분류")
+    @Column(name = "rep_nation_cd", length = 1, nullable = false)
+    private String repNationCd;
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof KOFICDailyBoxOfficeId koficDailyBoxOfficeId)) return false;
-        return movieNm != null && openDt != null && movieNm.equals(koficDailyBoxOfficeId.movieNm) && openDt.equals(koficDailyBoxOfficeId.openDt);
+        return movieNm != null && openDt != null && repNationCd != null && movieNm.equals(koficDailyBoxOfficeId.movieNm) && openDt.equals(koficDailyBoxOfficeId.openDt) && repNationCd.equals(koficDailyBoxOfficeId.repNationCd);
     }
 
     @Override
