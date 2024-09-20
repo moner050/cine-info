@@ -38,8 +38,7 @@ public class KMDbApiServiceTest {
         // given
 
         // when
-        boolean b = kmdbApiService.searchKMDbMovieList("0", "3", "20230101", "20231231");
-
+        boolean b = kmdbApiService.saveKMDbMovieList("0", "3", "20230101", "20231231");
 
         // then
         List<KMDbMovieInfo> movieListAll = kmdbMovieInfoRepository.findAll();

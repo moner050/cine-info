@@ -30,7 +30,7 @@ public class KMDbApiService {
 
     // 영화 상세 정보 검색 및 저장
     @Transactional
-    public boolean searchKMDbMovieList (String startCount, String listCount, String releaseDts, String releaseDte) {
+    public boolean saveKMDbMovieList(String startCount, String listCount, String releaseDts, String releaseDte) {
         SearchKMDbMovieListRes searchKMDbMovieList = kmdbClient.searchKMDbMovieList(startCount, listCount, releaseDts, releaseDte);
 
         log.info("TotalCount: " + searchKMDbMovieList.getTotalCount());
