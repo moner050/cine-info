@@ -55,4 +55,26 @@ public class WeeklyBoxOfficeListRes {
                 .endDateRange(LocalDate.parse(endDate, DateTimeFormatter.ofPattern("yyyyMMdd")))
                 .build();
     }
+
+    public KOFICWeeklyBoxOffice toEntity(String repNationCd, String startDate, String endDate) {
+        KOFICWeeklyBoxOfficeId koficWeeklyBoxOfficeId = new KOFICWeeklyBoxOfficeId(movieNm, LocalDate.parse(openDt, DateTimeFormatter.ofPattern("yyyy-MM-dd")), repNationCd);
+        return KOFICWeeklyBoxOffice.builder()
+                .koficWeeklyBoxOfficeId(koficWeeklyBoxOfficeId)
+                .movieRank(Integer.parseInt(rank))
+                .rankOldAndNew(rankOldAndNew)
+                .salesAmt(Long.parseLong(salesAmt))
+                .salesShare(Double.parseDouble(salesShare))
+                .salesInten(Long.parseLong(salesInten))
+                .salesChange(Double.parseDouble(salesChange))
+                .salesAcc(Long.parseLong(salesAcc))
+                .audiCnt(Long.parseLong(audiCnt))
+                .audiInten(Long.parseLong(audiInten))
+                .audiChange(Double.parseDouble(audiChange))
+                .audiAcc(Long.parseLong(audiAcc))
+                .scrnCnt(Integer.parseInt(scrnCnt))
+                .showCnt(Integer.parseInt(showCnt))
+                .startDateRange(LocalDate.parse(startDate, DateTimeFormatter.ofPattern("yyyyMMdd")))
+                .endDateRange(LocalDate.parse(endDate, DateTimeFormatter.ofPattern("yyyyMMdd")))
+                .build();
+    }
 }
