@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Transactional
@@ -62,11 +63,16 @@ public class KOFICApiService {
         List<DailyBoxOfficeListRes> dailyBoxOfficeList = searchKOFICDailyBoxOfficeRes.getBoxOfficeResult().getDailyBoxOfficeList();
 
         for (DailyBoxOfficeListRes dailyBoxOffice : dailyBoxOfficeList) {
-            KMDbMovieInfo savedMovieInfo =  kmdbMovieInfoRepository
-                    .findByTitleContainsAndRepRlsDate(dailyBoxOffice.getMovieNm(), LocalDate.parse(dailyBoxOffice.getOpenDt(), DateTimeFormatter.ofPattern("yyyy-MM-dd")))
-                    .orElseThrow(() -> new RuntimeException("저장되있는 영화가 없습니다."));
+            Optional<KMDbMovieInfo> savedMovieInfo = kmdbMovieInfoRepository
+                    .findByTitleContainsAndRepRlsDate(dailyBoxOffice.getMovieNm(), LocalDate.parse(dailyBoxOffice.getOpenDt(), DateTimeFormatter.ofPattern("yyyy-MM-dd")));
 
-            koficDailyBoxOfficeRepository.save(dailyBoxOffice.toEntity(repNationCd, targetDt, savedMovieInfo));
+            if(savedMovieInfo.isEmpty()) {
+                log.info(dailyBoxOffice.getMovieNm() + " 영화 데이터 존재하지 않음.");
+                koficDailyBoxOfficeRepository.save(dailyBoxOffice.toEntity(repNationCd, targetDt));
+            }
+            else {
+                koficDailyBoxOfficeRepository.save(dailyBoxOffice.toEntity(repNationCd, targetDt, savedMovieInfo.get()));
+            }
         }
 
         return true;
@@ -83,11 +89,16 @@ public class KOFICApiService {
         String startDate = showRange[0], endDate = showRange[1];
 
         for (WeeklyBoxOfficeListRes weeklyBoxOffice : weeklyBoxOfficeList) {
-            KMDbMovieInfo savedMovieInfo =  kmdbMovieInfoRepository
-                    .findByTitleContainsAndRepRlsDate(weeklyBoxOffice.getMovieNm(), LocalDate.parse(weeklyBoxOffice.getOpenDt(), DateTimeFormatter.ofPattern("yyyy-MM-dd")))
-                    .orElseThrow(() -> new RuntimeException("저장되있는 영화가 없습니다."));
+            Optional<KMDbMovieInfo> savedMovieInfo =  kmdbMovieInfoRepository
+                    .findByTitleContainsAndRepRlsDate(weeklyBoxOffice.getMovieNm(), LocalDate.parse(weeklyBoxOffice.getOpenDt(), DateTimeFormatter.ofPattern("yyyy-MM-dd")));
 
-            koficWeeklyBoxOfficeRepository.save(weeklyBoxOffice.toEntity(repNationCd, startDate, endDate, savedMovieInfo));
+            if(savedMovieInfo.isEmpty()) {
+                log.info(weeklyBoxOffice.getMovieNm() + " 영화 데이터 존재하지 않음.");
+                koficWeeklyBoxOfficeRepository.save(weeklyBoxOffice.toEntity(repNationCd, startDate, endDate));
+            }
+            else {
+                koficWeeklyBoxOfficeRepository.save(weeklyBoxOffice.toEntity(repNationCd, startDate, endDate, savedMovieInfo.get()));
+            }
         }
 
         return true;
