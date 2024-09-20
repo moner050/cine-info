@@ -103,10 +103,6 @@ public class KMDbMovieInfo {
     @Column(name = "theme_song", length = 200)
     private String themeSong;
 
-    @Comment("삽입곡")
-    @Column(name = "sound_track", length = 200)
-    private String soundTrack;
-
     @Comment("촬영장소")
     @Column(name = "f_location", length = 500)
     private String fLocation;
@@ -128,7 +124,7 @@ public class KMDbMovieInfo {
     private LocalDate modDate;
 
     @Builder
-    public KMDbMovieInfo(String movieId, String title, String titleEng, String titleOrg, String prodYear, String nation, String company, String runtime, String genre, String type, String purpose, String episodes, String ratedYn, LocalDate repRateDate, LocalDate repRlsDate, String keywords, String salesAcc, String audiAcc, String statSource, String statDate, String themeSong, String soundTrack, String fLocation, String awards1, String awards2, LocalDate regDate, LocalDate modDate) {
+    public KMDbMovieInfo(String movieId, String title, String titleEng, String titleOrg, String prodYear, String nation, String company, String runtime, String genre, String type, String purpose, String episodes, String ratedYn, LocalDate repRateDate, LocalDate repRlsDate, String keywords, String salesAcc, String audiAcc, String statSource, String statDate, String themeSong, String fLocation, String awards1, String awards2, LocalDate regDate, LocalDate modDate) {
         this.movieId = movieId;
         this.title = title;
         this.titleEng = titleEng;
@@ -150,7 +146,6 @@ public class KMDbMovieInfo {
         this.statSource = statSource;
         this.statDate = statDate;
         this.themeSong = themeSong;
-        this.soundTrack = soundTrack;
         this.fLocation = fLocation;
         this.awards1 = awards1;
         this.awards2 = awards2;
