@@ -11,7 +11,7 @@ spring:
   jpa:
     hibernate:
       # 엔티티를 보고 자동으로 DDL 문 만들지
-      ddl-auto: create-drop
+      ddl-auto: create
     # SQL 쿼리문 보여주도록 설정
     show-sql: true
     properties:
