@@ -13,25 +13,18 @@ import org.springframework.web.client.RestTemplate;
 public class KMDbClient {
 
     private final RestTemplate restTemplate;
-
-    public KMDbClient(RestTemplate restTemplate) {
-        this.restTemplate = restTemplate;
-    }
-
-    public static String serviceKey;                        // API 서비스 인증키
-    public static String basicUrl;                          // 기본요청 URL
+    private final String serviceKey;                        // API 서비스 인증키
+    private final String basicUrl;                          // 기본요청 URL
 
     /******************************** application-kmdb 에 설정된 값 불러오기 ************************************/
-    @Value("${kmdb.serviceKey}")
-    public void setServiceKey(String key) {
-        serviceKey = key;
+    public KMDbClient(RestTemplate restTemplate,
+                      @Value("${kmdb.serviceKey}") String key,
+                      @Value("${kmdb.url}") String url
+                      ) {
+        this.restTemplate = restTemplate;
+        this.serviceKey = key;
+        this.basicUrl = url;
     }
-
-    @Value("${kmdb.url}")
-    public void setBasicUrl(String url) {
-        basicUrl = url;
-    }
-
     /********************************************************************************************************/
 
     // 영화 상세 정보 검색
