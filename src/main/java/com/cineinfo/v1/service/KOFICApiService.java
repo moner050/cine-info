@@ -60,11 +60,27 @@ public class KOFICApiService {
     @Transactional
     public boolean saveDailyBoxOffice(String targetDt, String repNationCd) {
         SearchKOFICDailyBoxOfficeRes searchKOFICDailyBoxOfficeRes = koficClient.searchDailyBoxOffice(targetDt, repNationCd);
+
+        // 만약 응답값에 에러코드가 있으면 false 반환
+        if(searchKOFICDailyBoxOfficeRes.getFaultInfo() != null) {
+            log.error(searchKOFICDailyBoxOfficeRes.getFaultInfo().getMessage());
+            return false;
+        }
+
         List<DailyBoxOfficeListRes> dailyBoxOfficeList = searchKOFICDailyBoxOfficeRes.getBoxOfficeResult().getDailyBoxOfficeList();
 
         for (DailyBoxOfficeListRes dailyBoxOffice : dailyBoxOfficeList) {
+            // 개봉일 추출
+            LocalDate openDt = LocalDate.parse(dailyBoxOffice.getOpenDt(), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+
+            // 만약 해당 일별 박스오피스 데이터가 있으면 건너뛰기
+            if(koficDailyBoxOfficeRepository
+                    .existsByKoficDailyBoxOfficeId_MovieNmAndKoficDailyBoxOfficeId_OpenDtAndKoficDailyBoxOfficeId_RepNationCd(dailyBoxOffice.getMovieNm(), openDt, repNationCd)) {
+                continue;
+            }
+
             Optional<KMDbMovieInfo> savedMovieInfo = kmdbMovieInfoRepository
-                    .findByTitleContainsAndRepRlsDate(dailyBoxOffice.getMovieNm(), LocalDate.parse(dailyBoxOffice.getOpenDt(), DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+                    .findByTitleContainsAndRepRlsDate(dailyBoxOffice.getMovieNm(), openDt);
 
             if(savedMovieInfo.isEmpty()) {
                 log.info(dailyBoxOffice.getMovieNm() + " 영화 데이터 존재하지 않음.");
@@ -82,6 +98,12 @@ public class KOFICApiService {
     @Transactional
     public boolean saveWeeklyBoxOffice(String targetDt, String repNationCd, String weekGb) {
         SearchKOFICWeeklyBoxOfficeRes searchKOFICWeeklyBoxOfficeRes = koficClient.searchWeeklyBoxOffice(targetDt, repNationCd, weekGb);
+
+        // 만약 응답값에 에러코드가 있으면 false 리턴
+        if(searchKOFICWeeklyBoxOfficeRes.getFaultInfo() != null) {
+            log.error(searchKOFICWeeklyBoxOfficeRes.getFaultInfo().getMessage());
+            return false;
+        }
         List<WeeklyBoxOfficeListRes> weeklyBoxOfficeList = searchKOFICWeeklyBoxOfficeRes.getBoxOfficeResult().getWeeklyBoxOfficeList();
 
         // 조회 기간
@@ -89,8 +111,18 @@ public class KOFICApiService {
         String startDate = showRange[0], endDate = showRange[1];
 
         for (WeeklyBoxOfficeListRes weeklyBoxOffice : weeklyBoxOfficeList) {
+            // 개봉일 추출
+            LocalDate openDt = LocalDate.parse(weeklyBoxOffice.getOpenDt(), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+            LocalDate convertStartDate = LocalDate.parse(startDate, DateTimeFormatter.ofPattern("yyyyMMdd"));
+
+            // 해당 주간 박스오피스 데이터가 있으면 건너뛰기
+            if(koficWeeklyBoxOfficeRepository
+                    .existsByKoficWeeklyBoxOfficeId_MovieNmAndKoficWeeklyBoxOfficeId_OpenDtAndKoficWeeklyBoxOfficeId_RepNationCdAndStartDateRange(weeklyBoxOffice.getMovieNm(), openDt, repNationCd, convertStartDate)) {
+                continue;
+            }
+
             Optional<KMDbMovieInfo> savedMovieInfo =  kmdbMovieInfoRepository
-                    .findByTitleContainsAndRepRlsDate(weeklyBoxOffice.getMovieNm(), LocalDate.parse(weeklyBoxOffice.getOpenDt(), DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+                    .findByTitleContainsAndRepRlsDate(weeklyBoxOffice.getMovieNm(), openDt);
 
             if(savedMovieInfo.isEmpty()) {
                 log.info(weeklyBoxOffice.getMovieNm() + " 영화 데이터 존재하지 않음.");
