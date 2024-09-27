@@ -10,4 +10,5 @@ import lombok.*;
 public class SearchKOFICWeeklyBoxOfficeRes {
 
     private WeeklyBoxOfficeResultRes boxOfficeResult;
+    private FaultInfoRes faultInfo;
 }

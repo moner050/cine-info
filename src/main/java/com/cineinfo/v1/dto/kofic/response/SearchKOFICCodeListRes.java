@@ -12,4 +12,5 @@ import java.util.List;
 public class SearchKOFICCodeListRes {
 
     private List<CodesRes> codes;
+    private FaultInfoRes faultInfo;
 }
