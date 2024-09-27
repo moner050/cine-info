@@ -41,6 +41,19 @@ public class KOFICApiService {
     public boolean saveComCode(String summary) {
         int count = 0;
         SearchKOFICCodeListRes searchCodeList = koficClient.searchCodeList(summary);
+
+        // 에러 코드 반환시 출력 후 false 리턴
+        if(searchCodeList.getFaultInfo() != null) {
+            log.error(searchCodeList.getFaultInfo().getMessage());
+            return false;
+        }
+
+        // 결과 값이 아예 존재하지 않으면 false 리턴
+        if(searchCodeList.getCodes().isEmpty()) {
+            log.error("ComCode 결과값이 존재하지 않습니다.");
+            return false;
+        }
+
         List<CodesRes> codes = searchCodeList.getCodes();
 
         for (CodesRes code : codes) {
