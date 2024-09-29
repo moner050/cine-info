@@ -43,7 +43,7 @@ public class KMDbMovieStaffs {
     private String staffRole;
 
     @Comment("스태프 기타")
-    @Column(name = "staff_etc", length = 100)
+    @Column(name = "staff_etc", length = 2000)
     private String staffEtc;
 
     @Builder
