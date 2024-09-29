@@ -94,8 +94,8 @@ public class ResultRes {
                 .purpose(use)
                 .episodes(episodes)
                 .ratedYn(ratedYn)
-                .repRateDate(LocalDate.parse(replaceDate(repRatDate), DateTimeFormatter.ofPattern("yyyyMMdd")))
-                .repRlsDate(LocalDate.parse(replaceDate(repRlsDate), DateTimeFormatter.ofPattern("yyyyMMdd")))
+                .repRateDate(repRatDate.isEmpty() ? null : LocalDate.parse(replaceDate(repRatDate), DateTimeFormatter.ofPattern("yyyyMMdd")))
+                .repRlsDate(repRlsDate.isEmpty() ? null : LocalDate.parse(replaceDate(repRlsDate), DateTimeFormatter.ofPattern("yyyyMMdd")))
                 .keywords(keywords)
                 .salesAcc(salesAcc)
                 .audiAcc(audiAcc)
@@ -105,8 +105,8 @@ public class ResultRes {
                 .fLocation(fLocation)
                 .awards1(awards1)
                 .awards2(awards2)
-                .regDate(LocalDate.parse(replaceDate(regDate), DateTimeFormatter.ofPattern("yyyyMMdd")))
-                .modDate(LocalDate.parse(replaceDate(modDate), DateTimeFormatter.ofPattern("yyyyMMdd")))
+                .regDate(regDate.isEmpty() ? null : LocalDate.parse(replaceDate(regDate), DateTimeFormatter.ofPattern("yyyyMMdd")))
+                .modDate(modDate.isEmpty() ? null : LocalDate.parse(replaceDate(modDate), DateTimeFormatter.ofPattern("yyyyMMdd")))
                 .build();
     }
 
