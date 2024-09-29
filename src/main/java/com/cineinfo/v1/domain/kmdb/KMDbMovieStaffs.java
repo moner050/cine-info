@@ -35,11 +35,11 @@ public class KMDbMovieStaffs {
     private String staffEnNm;
 
     @Comment("스태프 크레딧 명칭")
-    @Column(name = "staff_role_group", length = 100)
+    @Column(name = "staff_role_group", length = 200)
     private String staffRoleGroup;
 
     @Comment("스태프 배역")
-    @Column(name = "staff_role", length = 100)
+    @Column(name = "staff_role", length = 500)
     private String staffRole;
 
     @Comment("스태프 기타")
