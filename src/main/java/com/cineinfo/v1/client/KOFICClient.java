@@ -1,11 +1,11 @@
 package com.cineinfo.v1.client;
 
-import com.cineinfo.v1.dto.kofic.request.SearchKOFICCodeListReq;
-import com.cineinfo.v1.dto.kofic.request.SearchKOFICDailyBoxOfficeReq;
-import com.cineinfo.v1.dto.kofic.request.SearchKOFICWeeklyBoxOfficeReq;
-import com.cineinfo.v1.dto.kofic.response.SearchKOFICCodeListRes;
-import com.cineinfo.v1.dto.kofic.response.SearchKOFICDailyBoxOfficeRes;
-import com.cineinfo.v1.dto.kofic.response.SearchKOFICWeeklyBoxOfficeRes;
+import com.cineinfo.v1.dto.admin.kofic.request.SearchKOFICCodeListReq;
+import com.cineinfo.v1.dto.admin.kofic.request.SearchKOFICDailyBoxOfficeReq;
+import com.cineinfo.v1.dto.admin.kofic.request.SearchKOFICWeeklyBoxOfficeReq;
+import com.cineinfo.v1.dto.admin.kofic.response.SearchKOFICCodeListRes;
+import com.cineinfo.v1.dto.admin.kofic.response.SearchKOFICDailyBoxOfficeRes;
+import com.cineinfo.v1.dto.admin.kofic.response.SearchKOFICWeeklyBoxOfficeRes;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;

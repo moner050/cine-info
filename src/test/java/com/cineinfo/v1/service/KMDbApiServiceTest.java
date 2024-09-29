@@ -1,7 +1,8 @@
 package com.cineinfo.v1.service;
 
-import com.cineinfo.v1.domain.kmdb.*;
-import com.cineinfo.v1.repository.kmdb.*;
+import com.cineinfo.v1.domain.admin.kmdb.*;
+import com.cineinfo.v1.repository.admin.kmdb.*;
+import com.cineinfo.v1.service.admin.KMDbApiService;
 import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.BDDAssertions;
 import org.junit.jupiter.api.DisplayName;

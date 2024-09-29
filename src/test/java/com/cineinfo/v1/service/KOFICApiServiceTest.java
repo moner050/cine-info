@@ -1,13 +1,15 @@
 package com.cineinfo.v1.service;
 
-import com.cineinfo.v1.domain.kofic.KOFICComCode;
-import com.cineinfo.v1.domain.kofic.KOFICDailyBoxOffice;
-import com.cineinfo.v1.domain.kofic.KOFICWeeklyBoxOffice;
-import com.cineinfo.v1.domain.kofic.constant.KOFICSummaryCd;
-import com.cineinfo.v1.repository.kmdb.KMDbMovieInfoRepository;
-import com.cineinfo.v1.repository.kofic.KOFICComCodeRepository;
-import com.cineinfo.v1.repository.kofic.KOFICDailyBoxOfficeRepository;
-import com.cineinfo.v1.repository.kofic.KOFICWeeklyBoxOfficeRepository;
+import com.cineinfo.v1.domain.admin.kofic.KOFICComCode;
+import com.cineinfo.v1.domain.admin.kofic.KOFICDailyBoxOffice;
+import com.cineinfo.v1.domain.admin.kofic.KOFICWeeklyBoxOffice;
+import com.cineinfo.v1.domain.admin.kofic.constant.KOFICSummaryCd;
+import com.cineinfo.v1.repository.admin.kmdb.KMDbMovieInfoRepository;
+import com.cineinfo.v1.repository.admin.kofic.KOFICComCodeRepository;
+import com.cineinfo.v1.repository.admin.kofic.KOFICDailyBoxOfficeRepository;
+import com.cineinfo.v1.repository.admin.kofic.KOFICWeeklyBoxOfficeRepository;
+import com.cineinfo.v1.service.admin.KMDbApiService;
+import com.cineinfo.v1.service.admin.KOFICApiService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
