@@ -108,11 +108,11 @@ public class KMDbMovieInfo {
     private String fLocation;
 
     @Comment("영화제수상내역")
-    @Column(name = "awards1", length = 500)
+    @Column(name = "awards1", length = 3000)
     private String awards1;
 
     @Comment("수상내역 ")
-    @Column(name = "awards2", length = 500)
+    @Column(name = "awards2", length = 3000)
     private String awards2;
 
     @Comment("등록일")
