@@ -20,5 +20,7 @@ public class SearchKMDbMovieListRes {
     private Integer totalCount;
     @JsonProperty("Data")
     private List<DataRes> data;
+    @JsonProperty("Error")
+    private String error;
 
 }
