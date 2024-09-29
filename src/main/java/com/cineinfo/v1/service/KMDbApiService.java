@@ -28,12 +28,31 @@ public class KMDbApiService {
     private final KMDbMovieStillsRepository kmdbMovieStillsRepository;
     private final KMDbMovieVodsRepository kmdbMovieVodsRepository;
 
+    // 영화 상세 정보 검색 및 전체 저장
+    public boolean saveAllKMDbMovieList(String releaseDts, String releaseDte) {
+        int count = 1;
+        int totalCount = saveKMDbMovieList("0", "500", releaseDts, releaseDte);
+
+        if(totalCount > 500) {
+            for (int i = 500; i <= totalCount; i+=500, count++) {
+                saveKMDbMovieList(String.valueOf(i), "500", releaseDts, releaseDte);
+            }
+        }
+
+        log.info("totalCount: " + totalCount);
+        log.info("count: " + count);
+
+        return true;
+    }
+
     // 영화 상세 정보 검색 및 저장
     @Transactional
-    public boolean saveKMDbMovieList(String startCount, String listCount, String releaseDts, String releaseDte) {
+    public int saveKMDbMovieList(String startCount, String listCount, String releaseDts, String releaseDte) {
         SearchKMDbMovieListRes searchKMDbMovieList = kmdbClient.searchKMDbMovieList(startCount, listCount, releaseDts, releaseDte);
 
-        log.info("TotalCount: " + searchKMDbMovieList.getTotalCount());
+        int totalCount = searchKMDbMovieList.getTotalCount();
+
+        log.info("TotalCount: " + totalCount);
         log.info("data size: " + searchKMDbMovieList.getData().size());
 
         DataRes dataRes = searchKMDbMovieList.getData().get(0);
@@ -117,6 +136,6 @@ public class KMDbApiService {
 
         }
 
-        return true;
+        return totalCount;
     }
 }
