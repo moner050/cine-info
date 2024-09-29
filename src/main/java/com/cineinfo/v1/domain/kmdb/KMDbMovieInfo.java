@@ -104,7 +104,7 @@ public class KMDbMovieInfo {
     private String themeSong;
 
     @Comment("촬영장소")
-    @Column(name = "f_location", length = 500)
+    @Column(name = "f_location", length = 3000)
     private String fLocation;
 
     @Comment("영화제수상내역")
