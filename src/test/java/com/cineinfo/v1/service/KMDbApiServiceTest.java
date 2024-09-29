@@ -3,10 +3,13 @@ package com.cineinfo.v1.service;
 import com.cineinfo.v1.domain.kmdb.*;
 import com.cineinfo.v1.repository.kmdb.*;
 import lombok.extern.slf4j.Slf4j;
+import org.assertj.core.api.BDDAssertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.HttpServerErrorException;
 
 import java.util.List;
 
@@ -33,16 +36,33 @@ public class KMDbApiServiceTest {
     KMDbMovieVodsRepository kmdbMovieVodsRepository;
 
     @Test
+    @DisplayName("영화 검색 및 전체 저장")
+    @Transactional
+    void saveAllKMDbMovieList() {
+        // given
+
+        // when
+        boolean chk = kmdbApiService.saveAllKMDbMovieList("20220101", "20221231");
+
+        // then
+        assertThat(chk).isTrue();
+        List<KMDbMovieInfo> savedMovieInfos = kmdbMovieInfoRepository.findAll();
+
+        assertThat(savedMovieInfos.size()).isEqualTo(641);
+    }
+
+    @Test
     @DisplayName("영화 검색 및 저장")
+    @Transactional
     void saveKMDbMovieList() {
         // given
 
         // when
-        boolean b = kmdbApiService.saveKMDbMovieList("0", "3", "20230101", "20231231");
+        int totalCount = kmdbApiService.saveKMDbMovieList("0", "3", "20230101", "20231231");
 
         // then
         List<KMDbMovieInfo> movieListAll = kmdbMovieInfoRepository.findAll();
-        assertThat(b).isTrue();
+        assertThat(totalCount).isEqualTo(653);
 
         for (KMDbMovieInfo kmDbMovieInfo : movieListAll) {
             log.info("saved movie id = " + kmDbMovieInfo.getMovieId());
@@ -93,5 +113,17 @@ public class KMDbApiServiceTest {
         assertThat(movieVods.size()).isLessThan(2);
         assertThat(movieVods.get(0).getVodName()).isEqualTo("자전거 도둑 [40초예고편]");
 
+    }
+
+    @Test
+    @DisplayName("영화 검색 및 저장 실패")
+    void failSaveKMDbMovieList() {
+        // given
+
+        // when
+        Throwable t = BDDAssertions.catchThrowable(() -> kmdbApiService.saveKMDbMovieList("-1", "3", "20230101", "20231231"));
+
+        // then
+        assertThat(t).isInstanceOf(HttpServerErrorException.class);
     }
 }
