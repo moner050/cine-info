@@ -6,6 +6,7 @@ import com.cineinfo.v1.domain.admin.kmdb.KMDbMovieStaffs;
 import com.cineinfo.v1.dto.admin.kmdb.response.SearchKMDbMovieListRes;
 import com.cineinfo.v1.dto.admin.kmdb.response.movie_list.DataRes;
 import com.cineinfo.v1.dto.admin.kmdb.response.movie_list.ResultRes;
+import com.cineinfo.v1.dto.admin.kmdb.response.movie_list.StaffRes;
 import com.cineinfo.v1.repository.admin.kmdb.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -82,27 +83,38 @@ public class KMDbApiService {
             for (int i = 0; i < staffsListSize; i++) {
                 log.info("staff count : " + (i+1));
 
+                StaffRes staffRes = resultRes.getStaffs().getStaff().get(i);
+
                 // 스태프가 이미 있으면 기존 스태프 데이터 업데이트
                 Optional<KMDbMovieStaffs> searchStaff = kmdbMovieStaffsRepository
-                        .findByKmdbMovieInfo_MovieIdAndStaffNm(savedEntity.getMovieId(), resultRes.getStaffs().getStaff().get(i).getStaffNm());
+                        .findByKmdbMovieInfo_MovieIdAndStaffNm(savedEntity.getMovieId(), staffRes.getStaffNm());
 
                 if(searchStaff.isPresent()) {
+                    StringBuilder newRoleGroup = new StringBuilder();
+                    StringBuilder newRole = new StringBuilder();
+                    StringBuilder newEtc = new StringBuilder();
                     KMDbMovieStaffs savedMovieStaff = searchStaff.get();
-                    String newRoleGroup = savedMovieStaff.getStaffRoleGroup() + "," + resultRes.getStaffs().getStaff().get(i).getStaffRoleGroup();
-                    String newRole = savedMovieStaff.getStaffRole().isBlank() ? "" : (savedMovieStaff.getStaffRole() + ",");
-                    newRole += resultRes.getStaffs().getStaff().get(i).getStaffRole();
-                    String newEtc = savedMovieStaff.getStaffEtc().isBlank() ? "" : (savedMovieStaff.getStaffEtc() + ",");
-                    newEtc += resultRes.getStaffs().getStaff().get(i).getStaffEtc();
 
+                    newRoleGroup.append(savedMovieStaff.getStaffRoleGroup()).append(",").append(staffRes.getStaffRoleGroup());
+
+                    if(!savedMovieStaff.getStaffRole().isBlank()) {
+                        newRole.append(savedMovieStaff.getStaffRole()).append(",");
+                    }
+                    newRole.append(staffRes.getStaffRole());
+
+                    if(!savedMovieStaff.getStaffEtc().isBlank()) {
+                        newEtc.append(savedMovieStaff.getStaffEtc()).append(",");
+                    }
+                    newEtc.append(staffRes.getStaffEtc());
 
                     KMDbMovieStaffs newMovieStaffEntity = KMDbMovieStaffs.builder()
                             .staffId(savedMovieStaff.getStaffId())
                             .kmdbMovieInfo(savedEntity)
                             .staffNm(savedMovieStaff.getStaffNm())
                             .staffEnNm(savedMovieStaff.getStaffEnNm())
-                            .staffRoleGroup(newRoleGroup)
-                            .staffRole(newRole)
-                            .staffEtc(newEtc)
+                            .staffRoleGroup(newRoleGroup.toString())
+                            .staffRole(newRole.toString())
+                            .staffEtc(newEtc.toString())
                             .build();
 
                     kmdbMovieStaffsRepository.save(newMovieStaffEntity);
