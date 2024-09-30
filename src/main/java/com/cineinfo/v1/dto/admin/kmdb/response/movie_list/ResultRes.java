@@ -73,21 +73,43 @@ public class ResultRes {
 
     // 날짜일이 00일인 데이터가 존재해서 00 -> 01 로 바꾸는 메서드 추가
     // 날짜달이 00월인 데이터가 존재해서 00 -> 01 로 바꾸는 메서드 추가
+    // 날짜가 8글자가 아닌 7글자인 데이터가 존재해서 해당 데이터가 있으면 분기처리
     public String replaceDate(String date) {
         StringBuilder newDate = new StringBuilder();
-        date = date.trim();
+        StringBuilder newMonth = new StringBuilder();
+        StringBuilder newDay = new StringBuilder();
+
         String year = date.substring(0, 4);
-        String month = date.substring(4, 6);
-        String day = date.substring(6, 8);
+        date = date.trim();
 
-        if(month.equals("00")) {
-            month = "01";
+        if(date.length() == 7) {
+            // 만약 달 형식이 이상하면 분기처리
+            // 2024131 -> 20240131
+            if(Integer.parseInt(date.substring(4, 6)) > 12) {
+                newMonth.append("0").append(date.charAt(4));
+                newDay.append(date, 5, 7);
+            }
+            // 2024128 -> 20241208
+            else {
+                newMonth.append(date, 4, 6);
+                newDay.append("0").append(date.charAt(6));
+            }
         }
-        if(day.equals("00")) {
-            day = "01";
+        else {
+            newMonth.append(date, 4, 6);
+            newDay.append(date, 6, 8);
         }
 
-        return newDate.append(year).append(month).append(day).toString();
+        if(newMonth.toString().equals("00")) {
+            newMonth.delete(0, newMonth.length());
+            newMonth.append("01");
+        }
+        if(newDay.toString().equals("00")) {
+            newDay.delete(0, newDay.length());
+            newDay.append("01");
+        }
+
+        return newDate.append(year).append(newMonth).append(newDay).toString();
     }
 
     public KMDbMovieInfo toEntity() {
