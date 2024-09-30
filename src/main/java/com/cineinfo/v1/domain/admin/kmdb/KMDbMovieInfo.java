@@ -84,20 +84,20 @@ public class KMDbMovieInfo {
     private String keywords;
 
     @Comment("누적매출액")
-    @Column(name = "sales_acc", length = 20)
-    private String salesAcc;
+    @Column(name = "sales_acc")
+    private Long salesAcc;
 
     @Comment("누적관람인원")
-    @Column(name = "audi_acc", length = 20)
-    private String audiAcc;
+    @Column(name = "audi_acc")
+    private Long audiAcc;
 
     @Comment("출처")
     @Column(name = "stat_source", length = 50)
     private String statSource;
 
     @Comment("기준일")
-    @Column(name = "stat_date", length = 10)
-    private String statDate;
+    @Column(name = "stat_date")
+    private LocalDate statDate;
 
     @Comment("주제곡")
     @Column(name = "theme_song", length = 200)
@@ -124,7 +124,7 @@ public class KMDbMovieInfo {
     private LocalDate modDate;
 
     @Builder
-    public KMDbMovieInfo(String movieId, String title, String titleEng, String titleOrg, String prodYear, String nation, String company, String runtime, String genre, String type, String purpose, String episodes, String ratedYn, LocalDate repRateDate, LocalDate repRlsDate, String keywords, String salesAcc, String audiAcc, String statSource, String statDate, String themeSong, String fLocation, String awards1, String awards2, LocalDate regDate, LocalDate modDate) {
+    public KMDbMovieInfo(String movieId, String title, String titleEng, String titleOrg, String prodYear, String nation, String company, String runtime, String genre, String type, String purpose, String episodes, String ratedYn, LocalDate repRateDate, LocalDate repRlsDate, String keywords, Long salesAcc, Long audiAcc, String statSource, LocalDate statDate, String themeSong, String fLocation, String awards1, String awards2, LocalDate regDate, LocalDate modDate) {
         this.movieId = movieId;
         this.title = title;
         this.titleEng = titleEng;
