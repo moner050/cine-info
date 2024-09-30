@@ -113,6 +113,11 @@ public class ResultRes {
     }
 
     public KMDbMovieInfo toEntity() {
+        salesAcc = salesAcc.isEmpty() ? null : salesAcc.split("\\|")[0];
+        audiAcc = audiAcc.isEmpty() ? null : audiAcc.split("\\|")[0];
+        statSouce = statSouce.isEmpty() ? "" : statSouce.split("\\|")[0];
+        statDate = statDate.isEmpty() ? "" : statDate.split("\\|")[0];
+
         return KMDbMovieInfo.builder()
                 .movieId(DOCID)
                 .title(title)
@@ -130,10 +135,10 @@ public class ResultRes {
                 .repRateDate(repRatDate.isEmpty() ? null : LocalDate.parse(replaceDate(repRatDate), DateTimeFormatter.ofPattern("yyyyMMdd")))
                 .repRlsDate(repRlsDate.isEmpty() ? null : LocalDate.parse(replaceDate(repRlsDate), DateTimeFormatter.ofPattern("yyyyMMdd")))
                 .keywords(keywords)
-                .salesAcc(salesAcc)
-                .audiAcc(audiAcc)
+                .salesAcc(salesAcc != null ? Long.parseLong(salesAcc) : null)
+                .audiAcc(audiAcc != null ? Long.parseLong(audiAcc) : null)
                 .statSource(statSouce)
-                .statDate(statDate)
+                .statDate(statDate.isEmpty() ? null : LocalDate.parse(replaceDate(statDate), DateTimeFormatter.ofPattern("yyyyMMdd")))
                 .themeSong(themeSong)
                 .fLocation(fLocation)
                 .awards1(awards1)
