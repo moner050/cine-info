@@ -14,6 +14,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -40,6 +41,7 @@ class KOFICApiServiceTest {
 
     @Test
     @DisplayName("공통코드 저장")
+    @Transactional
     void saveComCode() {
         // given
         koficApiService.saveComCode(KOFICSummaryCd.COMPANY_PART_CD.getSummaryCd());
@@ -53,6 +55,7 @@ class KOFICApiServiceTest {
 
     @Test
     @DisplayName("공동코드 저장 실패")
+    @Transactional
     void falseSaveComeCode() {
         // given
 
@@ -66,6 +69,7 @@ class KOFICApiServiceTest {
 
     @Test
     @DisplayName("일별 박스오피스 순위 저장 및 조회")
+    @Transactional
     void saveDailyBoxOffice() {
         // given
 
@@ -123,6 +127,7 @@ class KOFICApiServiceTest {
 
     @Test
     @DisplayName("일별 박스오피스 순위 저장 실패")
+    @Transactional
     void falseSaveDailyBoxOffice() {
         // given
 
@@ -137,6 +142,7 @@ class KOFICApiServiceTest {
 
     @Test
     @DisplayName("주간 박스오피스 순위 저장 및 검색")
+    @Transactional
     void saveWeeklyBoxOffice() {
         // given
 
@@ -194,6 +200,7 @@ class KOFICApiServiceTest {
 
     @Test
     @DisplayName("주간 박스오피스 순위 저장 실패")
+    @Transactional
     void falseSaveWeeklyBoxOffice() {
         // given
 
