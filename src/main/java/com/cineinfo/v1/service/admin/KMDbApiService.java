@@ -7,7 +7,6 @@ import com.cineinfo.v1.dto.admin.kmdb.response.SearchKMDbMovieListRes;
 import com.cineinfo.v1.dto.admin.kmdb.response.movie_list.DataRes;
 import com.cineinfo.v1.dto.admin.kmdb.response.movie_list.ResultRes;
 import com.cineinfo.v1.repository.admin.kmdb.*;
-import com.cineinfo.v1.repository.kmdb.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
