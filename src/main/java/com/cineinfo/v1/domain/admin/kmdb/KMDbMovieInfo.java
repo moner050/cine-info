@@ -40,7 +40,7 @@ public class KMDbMovieInfo {
     private String prodYear;
 
     @Comment("제작국가")
-    @Column(name = "nation", length = 40)
+    @Column(name = "nation", length = 300)
     private String nation;
 
     @Comment("제작사")
