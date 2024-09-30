@@ -72,11 +72,22 @@ public class ResultRes {
     private String alias;
 
     // 날짜일이 00일인 데이터가 존재해서 00 -> 01 로 바꾸는 메서드 추가
+    // 날짜달이 00월인 데이터가 존재해서 00 -> 01 로 바꾸는 메서드 추가
     public String replaceDate(String date) {
-        if(date.endsWith("00")) {
-            date = date.substring(0, date.length()-2) + "01";
+        StringBuilder newDate = new StringBuilder();
+        date = date.trim();
+        String year = date.substring(0, 4);
+        String month = date.substring(4, 6);
+        String day = date.substring(6, 8);
+
+        if(month.equals("00")) {
+            month = "01";
         }
-        return date;
+        if(day.equals("00")) {
+            day = "01";
+        }
+
+        return newDate.append(year).append(month).append(day).toString();
     }
 
     public KMDbMovieInfo toEntity() {
