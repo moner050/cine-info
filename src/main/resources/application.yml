@@ -2,16 +2,16 @@ spring:
   application:
     name: cineinfo
   profiles:
-    include: mysql, kofic, jw
+    include: mysql, kofic, jw, kmdb
   thymeleaf:
     # thymeleaf 에 대한 캐시 남기지 않기.
     cache: false
     # templates 디렉토리 체크. 파일이 없으면 에러 발생.
-    check-template-location: true
+    check-template-location: false
   jpa:
     hibernate:
       # 엔티티를 보고 자동으로 DDL 문 만들지
-      ddl-auto: create-drop
+      ddl-auto: validate
     # SQL 쿼리문 보여주도록 설정
     show-sql: true
     properties:
