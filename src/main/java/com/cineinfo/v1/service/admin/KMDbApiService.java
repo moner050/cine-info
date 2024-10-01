@@ -120,7 +120,7 @@ public class KMDbApiService {
                     kmdbMovieStaffsRepository.save(newMovieStaffEntity);
                 }
                 else {
-                    kmdbMovieStaffsRepository.save(resultRes.getStaffs().getStaff().get(i).toEntity(savedEntity));
+                    kmdbMovieStaffsRepository.save(staffRes.toEntity(savedEntity));
                 }
             }
 
