@@ -8,15 +8,15 @@ import com.cineinfo.v1.dto.admin.kofic.response.SearchKOFICDailyBoxOfficeRes;
 import com.cineinfo.v1.dto.admin.kofic.response.SearchKOFICWeeklyBoxOfficeRes;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestClient;
 import org.springframework.web.client.RestTemplate;
 
 @Slf4j
 @Component
 public class KOFICClient {
 
-    private final RestTemplate restTemplate;
+    private final RestClient restClient;
     private final String koficKey;                      //  키값
     private final String subKey;                        //  임시 키값
     private final String prefixUrl;                     //  기본주소
@@ -31,7 +31,7 @@ public class KOFICClient {
     private final String weeklyBoxOfficeList;           //  주간/주말 박스오피스
 
     /******************************** application-kofic 에 설정된 값 불러오기 ************************************/
-    public KOFICClient(RestTemplate restTemplate,
+    public KOFICClient(RestClient restClient,
                        @Value("${kofic.key1}") String key1,
                        @Value("${kofic.key2}") String key2,
                        @Value("${kofic.url.prefix}") String prefix,
@@ -45,7 +45,7 @@ public class KOFICClient {
                        @Value("${kofic.url.searchDailyBoxOfficeList}") String searchDailyBoxOfficeList,
                        @Value("${kofic.url.searchWeeklyBoxOfficeList}") String searchWeeklyBoxOfficeList
                        ) {
-        this.restTemplate = restTemplate;
+        this.restClient = restClient;
         this.koficKey = key1;
         this.subKey = key2;
         this.prefixUrl = prefix;
@@ -62,32 +62,26 @@ public class KOFICClient {
 
     // 공통 코드 조회
     public SearchKOFICCodeListRes searchCodeList(String comCode) {
-        RestTemplateClient restTemplateClient = new RestTemplateClient();
+        CustomRestClient customRestClient = new CustomRestClient();
         SearchKOFICCodeListReq searchCodeListReq = new SearchKOFICCodeListReq(koficKey, comCode);
 
-        ParameterizedTypeReference<SearchKOFICCodeListRes> responseType = new ParameterizedTypeReference<SearchKOFICCodeListRes>() {};
-
-        return restTemplateClient.getSearchResponse(responseType, searchCodeListReq.toMultiValueMap(), (prefixUrl + codeList), restTemplate);
+        return customRestClient.getSearchResponse(SearchKOFICCodeListRes.class, searchCodeListReq.toMultiValueMap(), prefixUrl, codeList, restClient);
     }
 
 
     // 일간 박스오피스 순위 조회
     public SearchKOFICDailyBoxOfficeRes searchDailyBoxOffice(String targetDt, String repNationCd) {
-        RestTemplateClient restTemplateClient = new RestTemplateClient();
+        CustomRestClient customRestClient = new CustomRestClient();
         SearchKOFICDailyBoxOfficeReq searchKOFICDailyBoxOfficeReq = new SearchKOFICDailyBoxOfficeReq(koficKey, targetDt, repNationCd);
 
-        ParameterizedTypeReference<SearchKOFICDailyBoxOfficeRes> responseType = new ParameterizedTypeReference<SearchKOFICDailyBoxOfficeRes>() {};
-
-        return restTemplateClient.getSearchResponse(responseType, searchKOFICDailyBoxOfficeReq.toMultiValueMap(), (prefixUrl + dailyBoxOfficeList), restTemplate);
+        return customRestClient.getSearchResponse(SearchKOFICDailyBoxOfficeRes.class, searchKOFICDailyBoxOfficeReq.toMultiValueMap(), prefixUrl, dailyBoxOfficeList, restClient);
     }
 
     // 주간 박스오피스 순위 조회
     public SearchKOFICWeeklyBoxOfficeRes searchWeeklyBoxOffice(String targetDt, String repNationCd, String weekGb) {
-        RestTemplateClient restTemplateClient = new RestTemplateClient();
+        CustomRestClient customRestClient = new CustomRestClient();
         SearchKOFICWeeklyBoxOfficeReq searchWeeklyBoxOfficeReq = new SearchKOFICWeeklyBoxOfficeReq(koficKey, targetDt, repNationCd, weekGb);
 
-        ParameterizedTypeReference<SearchKOFICWeeklyBoxOfficeRes> responseType = new ParameterizedTypeReference<SearchKOFICWeeklyBoxOfficeRes>() {};
-
-        return restTemplateClient.getSearchResponse(responseType, searchWeeklyBoxOfficeReq.toMultiValueMap(), (prefixUrl + weeklyBoxOfficeList), restTemplate);
+        return customRestClient.getSearchResponse(SearchKOFICWeeklyBoxOfficeRes.class, searchWeeklyBoxOfficeReq.toMultiValueMap(), prefixUrl, weeklyBoxOfficeList, restClient);
     }
 }
