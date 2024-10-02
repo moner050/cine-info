@@ -14,6 +14,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
@@ -176,5 +178,22 @@ public class KMDbApiService {
         }
 
         return totalCount;
+    }
+
+    // 영화 정보 삭제
+    @Transactional
+    public void deleteMovieInfoById(String movie_id) {
+        kmdbMovieInfoRepository.delete(
+                kmdbMovieInfoRepository.findById(movie_id).orElseThrow(() -> new RuntimeException("삭제할 유저를 찾을 수 없습니다.")));
+    }
+
+    // 기간별 영화 정보 삭제
+    @Transactional
+    public void deleteMovieInfoByRepRlsDate(LocalDate startDate, LocalDate endDate) {
+        List<KMDbMovieInfo> deleteMovieList = kmdbMovieInfoRepository.findAllByRepRlsDateBetween(startDate, endDate);
+
+        for (KMDbMovieInfo kmdbMovieInfo : deleteMovieList) {
+            deleteMovieInfoById(kmdbMovieInfo.getMovieId());
+        }
     }
 }
