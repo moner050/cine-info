@@ -29,7 +29,7 @@ public class KOFICDailyBoxOffice {
     private String rankOldAndNew;
 
     @Comment("영화 아이디")
-    @ManyToOne(optional = true)
+    @ManyToOne(optional = true, fetch = FetchType.LAZY)
     @JoinColumn(name = "movie_id")
     private KMDbMovieInfo kmdbMovieInfo;
 
