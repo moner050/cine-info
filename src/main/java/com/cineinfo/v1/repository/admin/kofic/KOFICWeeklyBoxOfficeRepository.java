@@ -10,9 +10,9 @@ import java.util.Optional;
 
 public interface KOFICWeeklyBoxOfficeRepository extends JpaRepository<KOFICWeeklyBoxOffice, KOFICWeeklyBoxOfficeId> {
 
-    boolean existsByKoficWeeklyBoxOfficeId_MovieNmAndKoficWeeklyBoxOfficeId_OpenDtAndKoficWeeklyBoxOfficeId_RepNationCdAndStartDateRange(String movieNm, LocalDate openDt, String repNationCd, LocalDate startDateRange);
-    Optional<KOFICWeeklyBoxOffice> findByKoficWeeklyBoxOfficeId_RepNationCdAndMovieRankAndStartDateRange(String repNationCd, Integer movieRank, LocalDate startDateRange);
+    boolean existsByKoficWeeklyBoxOfficeId_MovieNmAndKoficWeeklyBoxOfficeId_OpenDtAndKoficWeeklyBoxOfficeId_RepNationCdAndKoficWeeklyBoxOfficeId_StartDateRange(String movieNm, LocalDate openDt, String repNationCd, LocalDate startDateRange);
+    Optional<KOFICWeeklyBoxOffice> findByKoficWeeklyBoxOfficeId_RepNationCdAndMovieRankAndKoficWeeklyBoxOfficeId_StartDateRange(String repNationCd, Integer movieRank, LocalDate startDateRange);
     List<KOFICWeeklyBoxOffice> findByKmdbMovieInfo_MovieIdIsNull();
     List<KOFICWeeklyBoxOffice> findByKoficWeeklyBoxOfficeId_RepNationCd(String repNationCd);
-    List<KOFICWeeklyBoxOffice> findByKoficWeeklyBoxOfficeId_RepNationCdAndStartDateRange(String repNationCd, LocalDate startDateRange);
+    List<KOFICWeeklyBoxOffice> findByKoficWeeklyBoxOfficeId_RepNationCdAndKoficWeeklyBoxOfficeId_StartDateRange(String repNationCd, LocalDate startDateRange);
 }
