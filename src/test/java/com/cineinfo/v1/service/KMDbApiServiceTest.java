@@ -9,9 +9,12 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.HttpServerErrorException;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -38,18 +41,25 @@ public class KMDbApiServiceTest {
 
     @Test
     @DisplayName("영화 검색 및 전체 저장")
-    @Transactional
-    void saveAllKMDbMovieList() {
+    @Rollback
+    void saveAllKMDbMovieList() throws InterruptedException {
         // given
 
+
         // when
-        boolean chk = kmdbApiService.saveAllKMDbMovieList("20220101", "20221231");
+        String releaseDts = "20240101", releaseDte = "20241231";
+        boolean chk = kmdbApiService.saveAllKMDbMovieList(releaseDts, releaseDte);
+
+        LocalDate startDate = LocalDate.parse(releaseDts, DateTimeFormatter.ofPattern("yyyyMMdd"));
+        LocalDate endDate = LocalDate.parse(releaseDte, DateTimeFormatter.ofPattern("yyyyMMdd"));
 
         // then
         assertThat(chk).isTrue();
-        List<KMDbMovieInfo> savedMovieInfos = kmdbMovieInfoRepository.findAll();
+        List<KMDbMovieInfo> savedMovieInfos = kmdbMovieInfoRepository.findAllByRepRlsDateBetween(startDate, endDate);
 
-        assertThat(savedMovieInfos.size()).isEqualTo(641);
+//        log.info(String.valueOf(savedMovieInfos.get(0).getRepRlsDate()));
+
+        assertThat(savedMovieInfos.size()).isEqualTo(488);
     }
 
     @Test

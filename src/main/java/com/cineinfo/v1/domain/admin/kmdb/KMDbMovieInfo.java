@@ -1,22 +1,23 @@
 package com.cineinfo.v1.domain.admin.kmdb;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
+import org.springframework.data.domain.Persistable;
 
 import java.time.LocalDate;
+import java.util.LinkedHashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Comment("KMDb 영화 정보")
 @Entity(name = "kmdb_movie_info")
-public class KMDbMovieInfo {
+public class KMDbMovieInfo implements Persistable<String> {
 
     @Id
     @Comment("영화 아이디")
@@ -91,11 +92,11 @@ public class KMDbMovieInfo {
     @Column(name = "audi_acc")
     private Long audiAcc;
 
-    @Comment("출처")
+    @Comment("매출액 및 관람인원 출처")
     @Column(name = "stat_source", length = 50)
     private String statSource;
 
-    @Comment("기준일")
+    @Comment("매출액 및 관람인원 기준일")
     @Column(name = "stat_date")
     private LocalDate statDate;
 
@@ -111,17 +112,32 @@ public class KMDbMovieInfo {
     @Column(name = "awards1", length = 3000)
     private String awards1;
 
-    @Comment("수상내역 ")
+    @Comment("수상내역")
     @Column(name = "awards2", length = 3000)
     private String awards2;
 
-    @Comment("등록일")
+    @Comment("영화 등록일")
     @Column(name = "reg_date")
     private LocalDate regDate;
 
-    @Comment("최종수정일")
+    @Comment("영화 최종수정일")
     @Column(name = "mod_date")
     private LocalDate modDate;
+
+    @OneToMany(mappedBy = "kmdbMovieInfo", cascade = CascadeType.ALL)
+    Set<KMDbMoviePlots> kmdbMoviePlots = new LinkedHashSet<>();
+
+    @OneToMany(mappedBy = "kmdbMovieInfo", cascade = CascadeType.ALL)
+    Set<KMDbMoviePosters> kmdbMoviePosters = new LinkedHashSet<>();
+
+    @OneToMany(mappedBy = "kmdbMovieInfo", cascade = CascadeType.ALL)
+    Set<KMDbMovieStaffs> kmdbMovieStaffs = new LinkedHashSet<>();
+
+    @OneToMany(mappedBy = "kmdbMovieInfo", cascade = CascadeType.ALL)
+    Set<KMDbMovieStills> kmdbMovieStills = new LinkedHashSet<>();
+
+    @OneToMany(mappedBy = "kmdbMovieInfo", cascade = CascadeType.ALL)
+    Set<KMDbMovieVods> kmdbMovieVods = new LinkedHashSet<>();
 
     @Builder
     public KMDbMovieInfo(String movieId, String title, String titleEng, String titleOrg, String prodYear, String nation, String company, String runtime, String genre, String type, String purpose, String episodes, String ratedYn, LocalDate repRateDate, LocalDate repRlsDate, String keywords, Long salesAcc, Long audiAcc, String statSource, LocalDate statDate, String themeSong, String fLocation, String awards1, String awards2, LocalDate regDate, LocalDate modDate) {
@@ -163,5 +179,15 @@ public class KMDbMovieInfo {
     @Override
     public int hashCode() {
         return Objects.hash(movieId);
+    }
+
+    @Override
+    public String getId() {
+        return this.movieId;
+    }
+
+    @Override
+    public boolean isNew() {
+        return this.movieId == null;
     }
 }

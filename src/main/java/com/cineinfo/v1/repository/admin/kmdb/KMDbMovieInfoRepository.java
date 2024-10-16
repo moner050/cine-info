@@ -12,5 +12,6 @@ public interface KMDbMovieInfoRepository extends JpaRepository<KMDbMovieInfo, St
     List<KMDbMovieInfo> findByTitleContains(String title);
     List<KMDbMovieInfo> findByGenreContains(String genre);
     List<KMDbMovieInfo> findByKeywordsContains(String keywords);
+    List<KMDbMovieInfo> findAllByRepRlsDateBetween(LocalDate startDate, LocalDate endDate);
     Optional<KMDbMovieInfo> findByTitleContainsAndRepRlsDate(String title, LocalDate repRlsDate);
 }

@@ -21,7 +21,7 @@ public class KMDbMovieStills {
     private Long stillId;
 
     @Comment("영화 아이디")
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "movieId")
     private KMDbMovieInfo kmdbMovieInfo;
 

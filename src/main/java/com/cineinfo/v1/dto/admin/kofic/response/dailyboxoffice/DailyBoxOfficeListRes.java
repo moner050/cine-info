@@ -34,7 +34,11 @@ public class DailyBoxOfficeListRes {
     private String showCnt;
 
     public KOFICDailyBoxOffice toEntity(String repNationCd, String targetDate, KMDbMovieInfo kmDbMovieInfo) {
-        KOFICDailyBoxOfficeId koficDailyBoxOfficeId = new KOFICDailyBoxOfficeId(movieNm, LocalDate.parse(openDt, DateTimeFormatter.ofPattern("yyyy-MM-dd")), repNationCd.isEmpty() ? "A" : repNationCd);
+        LocalDate parseOpenDt = LocalDate.parse(openDt, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        String parseRepNationCd = repNationCd.isBlank() ? "A" : repNationCd;
+        LocalDate parseTargetDate = LocalDate.parse(targetDate, DateTimeFormatter.ofPattern("yyyyMMdd"));
+
+        KOFICDailyBoxOfficeId koficDailyBoxOfficeId = new KOFICDailyBoxOfficeId(movieNm, parseOpenDt, parseRepNationCd, parseTargetDate);
         return KOFICDailyBoxOffice.builder()
                 .koficDailyBoxOfficeId(koficDailyBoxOfficeId)
                 .movieRank(Integer.parseInt(rank))
@@ -51,12 +55,15 @@ public class DailyBoxOfficeListRes {
                 .audiAcc(Long.parseLong(audiAcc))
                 .scrnCnt(Integer.parseInt(scrnCnt))
                 .showCnt(Integer.parseInt(showCnt))
-                .targetDate(LocalDate.parse(targetDate, DateTimeFormatter.ofPattern("yyyyMMdd")))
                 .build();
     }
 
     public KOFICDailyBoxOffice toEntity(String repNationCd, String targetDate) {
-        KOFICDailyBoxOfficeId koficDailyBoxOfficeId = new KOFICDailyBoxOfficeId(movieNm, LocalDate.parse(openDt, DateTimeFormatter.ofPattern("yyyy-MM-dd")), repNationCd.isEmpty() ? "A" : repNationCd);
+        LocalDate parseOpenDt = LocalDate.parse(openDt, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        String parseRepNationCd = repNationCd.isBlank() ? "A" : repNationCd;
+        LocalDate parseTargetDate = LocalDate.parse(targetDate, DateTimeFormatter.ofPattern("yyyyMMdd"));
+
+        KOFICDailyBoxOfficeId koficDailyBoxOfficeId = new KOFICDailyBoxOfficeId(movieNm, parseOpenDt, parseRepNationCd, parseTargetDate);
         return KOFICDailyBoxOffice.builder()
                 .koficDailyBoxOfficeId(koficDailyBoxOfficeId)
                 .movieRank(Integer.parseInt(rank))
@@ -72,7 +79,6 @@ public class DailyBoxOfficeListRes {
                 .audiAcc(Long.parseLong(audiAcc))
                 .scrnCnt(Integer.parseInt(scrnCnt))
                 .showCnt(Integer.parseInt(showCnt))
-                .targetDate(LocalDate.parse(targetDate, DateTimeFormatter.ofPattern("yyyyMMdd")))
                 .build();
     }
 }

@@ -34,7 +34,12 @@ public class WeeklyBoxOfficeListRes {
     private String showCnt;
 
     public KOFICWeeklyBoxOffice toEntity(String repNationCd, String startDate, String endDate, KMDbMovieInfo kmDbMovieInfo) {
-        KOFICWeeklyBoxOfficeId koficWeeklyBoxOfficeId = new KOFICWeeklyBoxOfficeId(movieNm, LocalDate.parse(openDt, DateTimeFormatter.ofPattern("yyyy-MM-dd")), repNationCd.isEmpty() ? "A" : repNationCd);
+        LocalDate parseOpenDt = LocalDate.parse(openDt, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        String parseRepNationCd = repNationCd.isBlank() ? "A" : repNationCd;
+        LocalDate parseStartDate = LocalDate.parse(startDate, DateTimeFormatter.ofPattern("yyyyMMdd"));
+        LocalDate parseEndDate = LocalDate.parse(endDate, DateTimeFormatter.ofPattern("yyyyMMdd"));
+
+        KOFICWeeklyBoxOfficeId koficWeeklyBoxOfficeId = new KOFICWeeklyBoxOfficeId(movieNm, parseOpenDt, parseRepNationCd, parseStartDate, parseEndDate);
         return KOFICWeeklyBoxOffice.builder()
                 .koficWeeklyBoxOfficeId(koficWeeklyBoxOfficeId)
                 .movieRank(Integer.parseInt(rank))
@@ -51,13 +56,16 @@ public class WeeklyBoxOfficeListRes {
                 .audiAcc(Long.parseLong(audiAcc))
                 .scrnCnt(Integer.parseInt(scrnCnt))
                 .showCnt(Integer.parseInt(showCnt))
-                .startDateRange(LocalDate.parse(startDate, DateTimeFormatter.ofPattern("yyyyMMdd")))
-                .endDateRange(LocalDate.parse(endDate, DateTimeFormatter.ofPattern("yyyyMMdd")))
                 .build();
     }
 
     public KOFICWeeklyBoxOffice toEntity(String repNationCd, String startDate, String endDate) {
-        KOFICWeeklyBoxOfficeId koficWeeklyBoxOfficeId = new KOFICWeeklyBoxOfficeId(movieNm, LocalDate.parse(openDt, DateTimeFormatter.ofPattern("yyyy-MM-dd")), repNationCd.isEmpty() ? "A" : repNationCd);
+        LocalDate parseOpenDt = LocalDate.parse(openDt, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        String parseRepNationCd = repNationCd.isBlank() ? "A" : repNationCd;
+        LocalDate parseStartDate = LocalDate.parse(startDate, DateTimeFormatter.ofPattern("yyyyMMdd"));
+        LocalDate parseEndDate = LocalDate.parse(endDate, DateTimeFormatter.ofPattern("yyyyMMdd"));
+
+        KOFICWeeklyBoxOfficeId koficWeeklyBoxOfficeId = new KOFICWeeklyBoxOfficeId(movieNm, parseOpenDt, parseRepNationCd, parseStartDate, parseEndDate);
         return KOFICWeeklyBoxOffice.builder()
                 .koficWeeklyBoxOfficeId(koficWeeklyBoxOfficeId)
                 .movieRank(Integer.parseInt(rank))
@@ -73,8 +81,6 @@ public class WeeklyBoxOfficeListRes {
                 .audiAcc(Long.parseLong(audiAcc))
                 .scrnCnt(Integer.parseInt(scrnCnt))
                 .showCnt(Integer.parseInt(showCnt))
-                .startDateRange(LocalDate.parse(startDate, DateTimeFormatter.ofPattern("yyyyMMdd")))
-                .endDateRange(LocalDate.parse(endDate, DateTimeFormatter.ofPattern("yyyyMMdd")))
                 .build();
     }
 }

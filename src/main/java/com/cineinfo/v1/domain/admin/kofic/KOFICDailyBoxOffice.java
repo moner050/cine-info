@@ -29,7 +29,7 @@ public class KOFICDailyBoxOffice {
     private String rankOldAndNew;
 
     @Comment("영화 아이디")
-    @ManyToOne(optional = true)
+    @ManyToOne(optional = true, fetch = FetchType.LAZY)
     @JoinColumn(name = "movie_id")
     private KMDbMovieInfo kmdbMovieInfo;
 
@@ -77,12 +77,8 @@ public class KOFICDailyBoxOffice {
     @Column(name = "show_cnt")
     private Integer showCnt;
 
-    @Comment("기준일자")
-    @Column(name = "target_date")
-    private LocalDate targetDate;
-
     @Builder
-    public KOFICDailyBoxOffice(KOFICDailyBoxOfficeId koficDailyBoxOfficeId, Integer movieRank, String rankOldAndNew, KMDbMovieInfo kmdbMovieInfo, Long salesAmt, Double salesShare, Long salesInten, Double salesChange, Long salesAcc, Long audiCnt, Long audiInten, Double audiChange, Long audiAcc, Integer scrnCnt, Integer showCnt, LocalDate targetDate) {
+    public KOFICDailyBoxOffice(KOFICDailyBoxOfficeId koficDailyBoxOfficeId, Integer movieRank, String rankOldAndNew, KMDbMovieInfo kmdbMovieInfo, Long salesAmt, Double salesShare, Long salesInten, Double salesChange, Long salesAcc, Long audiCnt, Long audiInten, Double audiChange, Long audiAcc, Integer scrnCnt, Integer showCnt) {
         this.koficDailyBoxOfficeId = koficDailyBoxOfficeId;
         this.movieRank = movieRank;
         this.rankOldAndNew = rankOldAndNew;
@@ -98,7 +94,6 @@ public class KOFICDailyBoxOffice {
         this.audiAcc = audiAcc;
         this.scrnCnt = scrnCnt;
         this.showCnt = showCnt;
-        this.targetDate = targetDate;
     }
 
     @Override
