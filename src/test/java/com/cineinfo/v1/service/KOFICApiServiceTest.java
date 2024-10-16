@@ -20,7 +20,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @DisplayName("KOFIC API 서비스 연결 테스트")
@@ -217,6 +217,7 @@ class KOFICApiServiceTest {
 
     @Test
     @DisplayName("일간 박스오피스 기간 지정 전체 저장 성공")
+    @Transactional
     void saveAllDailyBoxOffice() {
         // given
         String startDate = "20241001";
@@ -284,7 +285,6 @@ class KOFICApiServiceTest {
         String endDate = "20241015";
 
         LocalDate sDate = LocalDate.parse(startDate, DateTimeFormatter.ofPattern("yyyyMMdd"));
-        LocalDate eDate = LocalDate.parse(endDate, DateTimeFormatter.ofPattern("yyyyMMdd"));
 
         // when
         boolean aWeekly = koficApiService.saveAllWeeklyBoxOffice(startDate, endDate, "", "0");
