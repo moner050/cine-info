@@ -3,6 +3,9 @@ package com.cineinfo.v1.service.admin;
 import com.cineinfo.v1.client.KOFICClient;
 import com.cineinfo.v1.domain.admin.kmdb.KMDbMovieInfo;
 import com.cineinfo.v1.domain.admin.kofic.KOFICComCode;
+import com.cineinfo.v1.domain.admin.kofic.KOFICDailyBoxOffice;
+import com.cineinfo.v1.domain.admin.kofic.KOFICWeeklyBoxOffice;
+import com.cineinfo.v1.dto.admin.MovieStatDto;
 import com.cineinfo.v1.dto.admin.kofic.response.SearchKOFICCodeListRes;
 import com.cineinfo.v1.dto.admin.kofic.response.SearchKOFICDailyBoxOfficeRes;
 import com.cineinfo.v1.dto.admin.kofic.response.SearchKOFICWeeklyBoxOfficeRes;
@@ -144,8 +147,15 @@ public class KOFICApiService {
                 koficDailyBoxOfficeRepository.save(dailyBoxOffice.toEntity(repNationCd, targetDt));
             }
             else {
-                log.info("일간 박스오피스 저장 완료");
-                koficDailyBoxOfficeRepository.save(dailyBoxOffice.toEntity(repNationCd, targetDt, savedMovieInfo.get()));
+                log.info(dailyBoxOffice.getMovieNm() + " 일간 박스오피스 저장 완료");
+                KOFICDailyBoxOffice savedDailyBoxOffice = koficDailyBoxOfficeRepository.save(dailyBoxOffice.toEntity(repNationCd, targetDt, savedMovieInfo.get()));
+
+                // 만약 저장된 영화정보 매출액 데이터의 날짜가 박스오피스 기준일자보다 이전이면 업데이트 처리
+                if(savedMovieInfo.get().getStatDate() == null || savedMovieInfo.get().getStatDate().isAfter(savedDailyBoxOffice.getKoficDailyBoxOfficeId().getTargetDate())) {
+                    MovieStatDto movieStat = MovieStatDto.of(parseTargetDate, savedDailyBoxOffice.getAudiAcc(), savedDailyBoxOffice.getSalesAcc(), "kobis");
+                    updateMovieStat(savedMovieInfo.get(), movieStat);
+                    log.info(dailyBoxOffice.getMovieNm() + " 영화 매출액 및 관객수 데이터 갱신 완료.");
+                }
             }
         }
         return true;
@@ -229,12 +239,53 @@ public class KOFICApiService {
                 koficWeeklyBoxOfficeRepository.save(weeklyBoxOffice.toEntity(repNationCd, startDate, endDate));
             }
             else {
-                koficWeeklyBoxOfficeRepository.save(weeklyBoxOffice.toEntity(repNationCd, startDate, endDate, savedMovieInfo.get()));
+                log.info(weeklyBoxOffice.getMovieNm() + " 주간 박스오피스 순위 저장");
+                KOFICWeeklyBoxOffice savedWeeklyBoxOffice = koficWeeklyBoxOfficeRepository.save(weeklyBoxOffice.toEntity(repNationCd, startDate, endDate, savedMovieInfo.get()));
+
+                // 만약 저장된 영화정보 매출액 데이터의 날짜가 박스오피스 기준일자보다 이전이면 업데이트 처리
+                if(savedMovieInfo.get().getStatDate() == null || savedMovieInfo.get().getStatDate().isAfter(savedWeeklyBoxOffice.getKoficWeeklyBoxOfficeId().getEndDateRange())) {
+                    MovieStatDto movieStat = MovieStatDto.of(convertStartDate, savedWeeklyBoxOffice.getAudiAcc(), savedWeeklyBoxOffice.getSalesAcc(), "kobis");
+                    updateMovieStat(savedMovieInfo.get(), movieStat);
+                    log.info(weeklyBoxOffice.getMovieNm() + " 영화 매출액 및 관객수 데이터 갱신 완료.");
+                }
             }
         }
-
         return endDate;
     }
+
+    // 영화 매출 및 관객 업데이트
+    @Transactional
+    public KMDbMovieInfo updateMovieStat(KMDbMovieInfo kmdbMovieInfo, MovieStatDto movieStatDto) {
+        return kmdbMovieInfoRepository.save(KMDbMovieInfo.builder()
+                .movieId(kmdbMovieInfo.getMovieId())
+                .title(kmdbMovieInfo.getTitle())
+                .titleEng(kmdbMovieInfo.getTitleEng())
+                .titleOrg(kmdbMovieInfo.getTitleOrg())
+                .prodYear(kmdbMovieInfo.getProdYear())
+                .nation(kmdbMovieInfo.getNation())
+                .company(kmdbMovieInfo.getCompany())
+                .runtime(kmdbMovieInfo.getRuntime())
+                .genre(kmdbMovieInfo.getGenre())
+                .type(kmdbMovieInfo.getType())
+                .purpose(kmdbMovieInfo.getPurpose())
+                .episodes(kmdbMovieInfo.getEpisodes())
+                .ratedYn(kmdbMovieInfo.getRatedYn())
+                .repRateDate(kmdbMovieInfo.getRepRateDate())
+                .repRlsDate(kmdbMovieInfo.getRepRlsDate())
+                .keywords(kmdbMovieInfo.getKeywords())
+                .salesAcc(movieStatDto.salesAcc())
+                .audiAcc(movieStatDto.audiAcc())
+                .statSource(movieStatDto.stat_source())
+                .statDate(movieStatDto.statDate())
+                .themeSong(kmdbMovieInfo.getThemeSong())
+                .fLocation(kmdbMovieInfo.getFLocation())
+                .awards1(kmdbMovieInfo.getAwards1())
+                .awards2(kmdbMovieInfo.getAwards2())
+                .regDate(kmdbMovieInfo.getRegDate())
+                .modDate(kmdbMovieInfo.getModDate())
+                .build());
+    }
+
 
     public boolean checkDate(String date) {
         try {
