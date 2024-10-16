@@ -66,7 +66,7 @@ public class KMDbApiService {
         log.info("Count: " + dataRes.getCount());
         log.info("RealCount: " + realCount);
 
-        ExecutorService executorService = Executors.newFixedThreadPool(500);
+        ExecutorService executorService = Executors.newFixedThreadPool(1000);
         CountDownLatch latch = new CountDownLatch(realCount);
 
         for (ResultRes resultRes : dataRes.getResult()) {
