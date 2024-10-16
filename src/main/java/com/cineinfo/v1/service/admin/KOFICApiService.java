@@ -26,6 +26,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.*;
 
 @Slf4j
 @Transactional
@@ -135,20 +136,18 @@ public class KOFICApiService {
                 log.info(targetDt + "/" + dailyBoxOffice.getOpenDt() + " 일자의 " + dailyBoxOffice.getMovieNm() + " " + repNationCd + " 박스오피스 순위 데이터가 이미 존재합니다.");
                 continue;
             }
+            Optional<KMDbMovieInfo> savedMovieInfo = kmdbMovieInfoRepository
+                    .findByTitleContainsAndRepRlsDate(dailyBoxOffice.getMovieNm(), openDt);
 
-                Optional<KMDbMovieInfo> savedMovieInfo = kmdbMovieInfoRepository
-                        .findByTitleContainsAndRepRlsDate(dailyBoxOffice.getMovieNm(), openDt);
-
-                if(savedMovieInfo.isEmpty()) {
-                    log.info(dailyBoxOffice.getMovieNm() + " 영화 데이터 존재하지 않음.");
-                    koficDailyBoxOfficeRepository.save(dailyBoxOffice.toEntity(repNationCd, targetDt));
-                }
-                else {
-                    log.info("일간 박스오피스 저장 완료");
-                    koficDailyBoxOfficeRepository.save(dailyBoxOffice.toEntity(repNationCd, targetDt, savedMovieInfo.get()));
-                }
+            if(savedMovieInfo.isEmpty()) {
+                log.info(dailyBoxOffice.getMovieNm() + " 영화 데이터 존재하지 않음.");
+                koficDailyBoxOfficeRepository.save(dailyBoxOffice.toEntity(repNationCd, targetDt));
             }
-
+            else {
+                log.info("일간 박스오피스 저장 완료");
+                koficDailyBoxOfficeRepository.save(dailyBoxOffice.toEntity(repNationCd, targetDt, savedMovieInfo.get()));
+            }
+        }
         return true;
     }
 
@@ -222,7 +221,6 @@ public class KOFICApiService {
                 log.info(startDate + " 일자의 " + weeklyBoxOffice.getMovieNm() + " 주간 박스오피스 순위 데이터가 이미 존재합니다.");
                 continue;
             }
-
             Optional<KMDbMovieInfo> savedMovieInfo =  kmdbMovieInfoRepository
                     .findByTitleContainsAndRepRlsDate(weeklyBoxOffice.getMovieNm(), openDt);
 
@@ -244,7 +242,7 @@ public class KOFICApiService {
             check.setLenient(false);
             check.parse(date);
         }
-        catch (ParseException e) {
+        catch (ParseException | NullPointerException e) {
             log.error(date + " 는 날짜 형식에 맞지 않습니다. {}", e.getMessage());
             return false;
         }
