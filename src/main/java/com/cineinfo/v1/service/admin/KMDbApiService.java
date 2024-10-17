@@ -11,6 +11,7 @@ import com.cineinfo.v1.dto.admin.kmdb.response.movie_list.VodRes;
 import com.cineinfo.v1.repository.admin.kmdb.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,8 +19,6 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 @Slf4j
 @Service
@@ -34,6 +33,8 @@ public class KMDbApiService {
     private final KMDbMovieStaffsRepository kmdbMovieStaffsRepository;
     private final KMDbMovieStillsRepository kmdbMovieStillsRepository;
     private final KMDbMovieVodsRepository kmdbMovieVodsRepository;
+
+    private final ThreadPoolTaskExecutor taskExecutor;
 
     // 영화 상세 정보 검색 및 전체 저장
     @Transactional
@@ -66,19 +67,15 @@ public class KMDbApiService {
         log.info("Count: " + dataRes.getCount());
         log.info("RealCount: " + realCount);
 
-        ExecutorService executorService = Executors.newFixedThreadPool(1000);
         CountDownLatch latch = new CountDownLatch(realCount);
 
         for (ResultRes resultRes : dataRes.getResult()) {
-
-            // 해당 영화 정보가 이미 있으면 건너뛰기
-            if(kmdbMovieInfoRepository.existsById(resultRes.getDOCID())) {
-                latch.countDown();
-                continue;
-            }
-
-            executorService.submit(() -> {
-                try {
+            taskExecutor.submit(() -> {
+                // 해당 영화 정보가 이미 있으면 건너뛰기
+                if(kmdbMovieInfoRepository.existsById(resultRes.getDOCID())) {
+                    log.info(resultRes.getTitle() + " 영화 정보가 이미 존재합니다.");
+                }
+                else {
                     // KMDb 영화 정보 저장
                     KMDbMovieInfo savedEntity = kmdbMovieInfoRepository.save(resultRes.toEntity());
 
@@ -164,9 +161,7 @@ public class KMDbApiService {
                         kmdbMovieVodsRepository.save(vodRes.toEntity(savedEntity));
                     }
                 }
-                finally {
-                    latch.countDown();
-                }
+                latch.countDown();
             });
         }
 
