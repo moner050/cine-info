@@ -1,4 +1,4 @@
-package com.cineinfo.v1.service;
+package com.cineinfo.v1.service.admin;
 
 import com.cineinfo.v1.domain.admin.kofic.KOFICComCode;
 import com.cineinfo.v1.domain.admin.kofic.KOFICDailyBoxOffice;
