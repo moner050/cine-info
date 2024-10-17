@@ -18,6 +18,7 @@ import com.cineinfo.v1.repository.admin.kofic.KOFICDailyBoxOfficeRepository;
 import com.cineinfo.v1.repository.admin.kofic.KOFICWeeklyBoxOfficeRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -43,6 +44,8 @@ public class KOFICApiService {
     private final KOFICWeeklyBoxOfficeRepository koficWeeklyBoxOfficeRepository;
 
     private final KMDbMovieInfoRepository kmdbMovieInfoRepository;
+
+    private final ThreadPoolTaskExecutor taskExecutor;
 
     // 공통 코드 저장
     @Transactional
@@ -127,37 +130,53 @@ public class KOFICApiService {
 
         List<DailyBoxOfficeListRes> dailyBoxOfficeList = searchKOFICDailyBoxOfficeRes.getBoxOfficeResult().getDailyBoxOfficeList();
 
+        CountDownLatch latch = new CountDownLatch(10);
+
         for (DailyBoxOfficeListRes dailyBoxOffice : dailyBoxOfficeList) {
-            // 개봉일 추출
-            LocalDate openDt = LocalDate.parse(dailyBoxOffice.getOpenDt(), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-            // 기준일 변환
-            LocalDate parseTargetDate = LocalDate.parse(targetDt, DateTimeFormatter.ofPattern("yyyyMMdd"));
+            taskExecutor.submit(() -> {
+                // 개봉일 추출
+                LocalDate openDt = LocalDate.parse(dailyBoxOffice.getOpenDt(), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                // 기준일 변환
+                LocalDate parseTargetDate = LocalDate.parse(targetDt, DateTimeFormatter.ofPattern("yyyyMMdd"));
 
-            // 만약 해당 일별 박스오피스 데이터가 있으면 건너뛰기
-            if(koficDailyBoxOfficeRepository
-                    .existsByKoficDailyBoxOfficeId_MovieNmAndKoficDailyBoxOfficeId_OpenDtAndKoficDailyBoxOfficeId_RepNationCdAndKoficDailyBoxOfficeId_TargetDate(dailyBoxOffice.getMovieNm().trim(), openDt, repNationCd, parseTargetDate)) {
-                log.info(targetDt + "/" + dailyBoxOffice.getOpenDt() + " 일자의 " + dailyBoxOffice.getMovieNm() + " " + repNationCd + " 박스오피스 순위 데이터가 이미 존재합니다.");
-                continue;
-            }
-            Optional<KMDbMovieInfo> savedMovieInfo = kmdbMovieInfoRepository
-                    .findByTitleContainsAndRepRlsDate(dailyBoxOffice.getMovieNm(), openDt);
-
-            if(savedMovieInfo.isEmpty()) {
-                log.info(dailyBoxOffice.getMovieNm() + " 영화 데이터 존재하지 않음.");
-                koficDailyBoxOfficeRepository.save(dailyBoxOffice.toEntity(repNationCd, targetDt));
-            }
-            else {
-                log.info(dailyBoxOffice.getMovieNm() + " 일간 박스오피스 저장 완료");
-                KOFICDailyBoxOffice savedDailyBoxOffice = koficDailyBoxOfficeRepository.save(dailyBoxOffice.toEntity(repNationCd, targetDt, savedMovieInfo.get()));
-
-                // 만약 저장된 영화정보 매출액 데이터의 날짜가 박스오피스 기준일자보다 이전이면 업데이트 처리
-                if(savedMovieInfo.get().getStatDate() == null || savedMovieInfo.get().getStatDate().isAfter(savedDailyBoxOffice.getKoficDailyBoxOfficeId().getTargetDate())) {
-                    MovieStatDto movieStat = MovieStatDto.of(parseTargetDate, savedDailyBoxOffice.getAudiAcc(), savedDailyBoxOffice.getSalesAcc(), "kobis");
-                    updateMovieStat(savedMovieInfo.get(), movieStat);
-                    log.info(dailyBoxOffice.getMovieNm() + " 영화 매출액 및 관객수 데이터 갱신 완료.");
+                // 만약 해당 일별 박스오피스 데이터가 있으면 건너뛰기
+                if(koficDailyBoxOfficeRepository
+                        .existsByKoficDailyBoxOfficeId_MovieNmAndKoficDailyBoxOfficeId_OpenDtAndKoficDailyBoxOfficeId_RepNationCdAndKoficDailyBoxOfficeId_TargetDate(dailyBoxOffice.getMovieNm().trim(), openDt, repNationCd, parseTargetDate)) {
+                    log.info(targetDt + "/" + dailyBoxOffice.getOpenDt() + " 일자의 " + dailyBoxOffice.getMovieNm() + " " + repNationCd + " 박스오피스 순위 데이터가 이미 존재합니다.");
                 }
-            }
+                else {
+                    Optional<KMDbMovieInfo> savedMovieInfo = kmdbMovieInfoRepository
+                            .findByTitleContainsAndRepRlsDate(dailyBoxOffice.getMovieNm(), openDt);
+
+                    if(savedMovieInfo.isEmpty()) {
+                        log.info(dailyBoxOffice.getMovieNm() + " 영화 데이터 존재하지 않음.");
+                        koficDailyBoxOfficeRepository.save(dailyBoxOffice.toEntity(repNationCd, targetDt));
+                    }
+                    else {
+                        log.info(dailyBoxOffice.getMovieNm() + " 일간 박스오피스 저장 완료");
+                        KOFICDailyBoxOffice savedDailyBoxOffice = koficDailyBoxOfficeRepository.save(dailyBoxOffice.toEntity(repNationCd, targetDt, savedMovieInfo.get()));
+
+                        // 만약 저장된 영화정보 매출액 데이터의 날짜가 박스오피스 기준일자보다 이전이면 업데이트 처리
+                        if(savedMovieInfo.get().getStatDate() == null || savedMovieInfo.get().getStatDate().isAfter(savedDailyBoxOffice.getKoficDailyBoxOfficeId().getTargetDate())) {
+                            MovieStatDto movieStat = MovieStatDto.of(parseTargetDate, savedDailyBoxOffice.getAudiAcc(), savedDailyBoxOffice.getSalesAcc(), "kobis");
+                            updateMovieStat(savedMovieInfo.get(), movieStat);
+                            log.info(dailyBoxOffice.getMovieNm() + " 영화 매출액 및 관객수 데이터 갱신 완료.");
+                        }
+                    }
+                    koficDailyBoxOfficeRepository.flush();
+                    kmdbMovieInfoRepository.flush();
+                }
+                latch.countDown();
+            });
         }
+
+        try {
+            latch.await();
+        }
+        catch (InterruptedException e) {
+            throw new RuntimeException("스레드가 블로킹 되었습니다.");
+        }
+
         return true;
     }
 
@@ -220,36 +239,52 @@ public class KOFICApiService {
         String[] showRange = searchKOFICWeeklyBoxOfficeRes.getBoxOfficeResult().getShowRange().split("~");
         String startDate = showRange[0], endDate = showRange[1];
 
+        CountDownLatch latch = new CountDownLatch(10);
+
         for (WeeklyBoxOfficeListRes weeklyBoxOffice : weeklyBoxOfficeList) {
-            // 개봉일 추출
-            LocalDate openDt = LocalDate.parse(weeklyBoxOffice.getOpenDt(), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-            LocalDate convertStartDate = LocalDate.parse(startDate, DateTimeFormatter.ofPattern("yyyyMMdd"));
+            taskExecutor.submit(() -> {
+                // 개봉일 추출
+                LocalDate openDt = LocalDate.parse(weeklyBoxOffice.getOpenDt(), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                LocalDate convertStartDate = LocalDate.parse(startDate, DateTimeFormatter.ofPattern("yyyyMMdd"));
 
-            // 해당 주간 박스오피스 데이터가 있으면 건너뛰기
-            if(koficWeeklyBoxOfficeRepository
-                    .existsByKoficWeeklyBoxOfficeId_MovieNmAndKoficWeeklyBoxOfficeId_OpenDtAndKoficWeeklyBoxOfficeId_RepNationCdAndKoficWeeklyBoxOfficeId_StartDateRange(weeklyBoxOffice.getMovieNm(), openDt, repNationCd, convertStartDate)) {
-                log.info(startDate + " 일자의 " + weeklyBoxOffice.getMovieNm() + " 주간 박스오피스 순위 데이터가 이미 존재합니다.");
-                continue;
-            }
-            Optional<KMDbMovieInfo> savedMovieInfo =  kmdbMovieInfoRepository
-                    .findByTitleContainsAndRepRlsDate(weeklyBoxOffice.getMovieNm(), openDt);
-
-            if(savedMovieInfo.isEmpty()) {
-                log.info(weeklyBoxOffice.getMovieNm() + " 영화 데이터 존재하지 않음.");
-                koficWeeklyBoxOfficeRepository.save(weeklyBoxOffice.toEntity(repNationCd, startDate, endDate));
-            }
-            else {
-                log.info(weeklyBoxOffice.getMovieNm() + " 주간 박스오피스 순위 저장");
-                KOFICWeeklyBoxOffice savedWeeklyBoxOffice = koficWeeklyBoxOfficeRepository.save(weeklyBoxOffice.toEntity(repNationCd, startDate, endDate, savedMovieInfo.get()));
-
-                // 만약 저장된 영화정보 매출액 데이터의 날짜가 박스오피스 기준일자보다 이전이면 업데이트 처리
-                if(savedMovieInfo.get().getStatDate() == null || savedMovieInfo.get().getStatDate().isAfter(savedWeeklyBoxOffice.getKoficWeeklyBoxOfficeId().getEndDateRange())) {
-                    MovieStatDto movieStat = MovieStatDto.of(convertStartDate, savedWeeklyBoxOffice.getAudiAcc(), savedWeeklyBoxOffice.getSalesAcc(), "kobis");
-                    updateMovieStat(savedMovieInfo.get(), movieStat);
-                    log.info(weeklyBoxOffice.getMovieNm() + " 영화 매출액 및 관객수 데이터 갱신 완료.");
+                // 해당 주간 박스오피스 데이터가 있으면 건너뛰기
+                if(koficWeeklyBoxOfficeRepository
+                        .existsByKoficWeeklyBoxOfficeId_MovieNmAndKoficWeeklyBoxOfficeId_OpenDtAndKoficWeeklyBoxOfficeId_RepNationCdAndKoficWeeklyBoxOfficeId_StartDateRange(weeklyBoxOffice.getMovieNm(), openDt, repNationCd, convertStartDate)) {
+                    log.info(startDate + " 일자의 " + weeklyBoxOffice.getMovieNm() + " 주간 박스오피스 순위 데이터가 이미 존재합니다.");
                 }
-            }
+                else {
+                    Optional<KMDbMovieInfo> savedMovieInfo =  kmdbMovieInfoRepository
+                            .findByTitleContainsAndRepRlsDate(weeklyBoxOffice.getMovieNm(), openDt);
+
+                    if(savedMovieInfo.isEmpty()) {
+                        log.info(weeklyBoxOffice.getMovieNm() + " 영화 데이터 존재하지 않음.");
+                        koficWeeklyBoxOfficeRepository.save(weeklyBoxOffice.toEntity(repNationCd, startDate, endDate));
+                    }
+                    else {
+                        log.info(weeklyBoxOffice.getMovieNm() + " 주간 박스오피스 순위 저장");
+                        KOFICWeeklyBoxOffice savedWeeklyBoxOffice = koficWeeklyBoxOfficeRepository.save(weeklyBoxOffice.toEntity(repNationCd, startDate, endDate, savedMovieInfo.get()));
+
+                        // 만약 저장된 영화정보 매출액 데이터의 날짜가 박스오피스 기준일자보다 이전이면 업데이트 처리
+                        if(savedMovieInfo.get().getStatDate() == null || savedMovieInfo.get().getStatDate().isAfter(savedWeeklyBoxOffice.getKoficWeeklyBoxOfficeId().getEndDateRange())) {
+                            MovieStatDto movieStat = MovieStatDto.of(convertStartDate, savedWeeklyBoxOffice.getAudiAcc(), savedWeeklyBoxOffice.getSalesAcc(), "kobis");
+                            updateMovieStat(savedMovieInfo.get(), movieStat);
+                            log.info(weeklyBoxOffice.getMovieNm() + " 영화 매출액 및 관객수 데이터 갱신 완료.");
+                        }
+                    }
+                    koficWeeklyBoxOfficeRepository.flush();
+                    kmdbMovieInfoRepository.flush();
+                }
+                latch.countDown();
+            });
         }
+
+        try {
+            latch.await();
+        }
+        catch (InterruptedException e) {
+            throw new RuntimeException("스레드가 블로킹 되었습니다.");
+        }
+
         return endDate;
     }
 

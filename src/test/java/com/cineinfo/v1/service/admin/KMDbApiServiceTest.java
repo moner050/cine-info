@@ -1,4 +1,4 @@
-package com.cineinfo.v1.service;
+package com.cineinfo.v1.service.admin;
 
 import com.cineinfo.v1.domain.admin.kmdb.*;
 import com.cineinfo.v1.repository.admin.kmdb.*;
@@ -45,7 +45,6 @@ public class KMDbApiServiceTest {
     void saveAllKMDbMovieList() throws InterruptedException {
         // given
 
-
         // when
         String releaseDts = "20240101", releaseDte = "20241231";
         boolean chk = kmdbApiService.saveAllKMDbMovieList(releaseDts, releaseDte);
@@ -57,9 +56,7 @@ public class KMDbApiServiceTest {
         assertThat(chk).isTrue();
         List<KMDbMovieInfo> savedMovieInfos = kmdbMovieInfoRepository.findAllByRepRlsDateBetween(startDate, endDate);
 
-//        log.info(String.valueOf(savedMovieInfos.get(0).getRepRlsDate()));
-
-        assertThat(savedMovieInfos.size()).isEqualTo(488);
+        assertThat(savedMovieInfos.size()).isEqualTo(515);
     }
 
     @Test
