@@ -8,8 +8,8 @@ import java.util.concurrent.ThreadPoolExecutor;
 
 @Configuration
 public class ThreadPoolConfig {
-    private static final int CORE_POOL_SIZE = 10;
-    private static final int MAX_POOL_SIZE = 100;
+    private static final int CORE_POOL_SIZE = 100;
+    private static final int MAX_POOL_SIZE = 250;
     private static final int QUEUE_CAPACITY = 500;
     private static final boolean WAIT_TASK_COMPLETE = true;
 
