@@ -24,6 +24,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @DisplayName("KOFIC API 서비스 연결 테스트")
+@Transactional
 class KOFICApiServiceTest {
 
     @Autowired
@@ -83,15 +84,16 @@ class KOFICApiServiceTest {
         assertThat(dailyChkK).isTrue();
         assertThat(dailyChkF).isTrue();
 
-        List<KOFICDailyBoxOffice> a = koficDailyBoxOfficeRepository.findByKoficDailyBoxOfficeId_RepNationCd("A");
-        List<KOFICDailyBoxOffice> k = koficDailyBoxOfficeRepository.findByKoficDailyBoxOfficeId_RepNationCd("K");
-        List<KOFICDailyBoxOffice> f = koficDailyBoxOfficeRepository.findByKoficDailyBoxOfficeId_RepNationCd("F");
+        LocalDate date = LocalDate.parse("20240919", DateTimeFormatter.ofPattern("yyyyMMdd"));
+
+        List<KOFICDailyBoxOffice> a = koficDailyBoxOfficeRepository.findByKoficDailyBoxOfficeId_RepNationCdAndKoficDailyBoxOfficeId_TargetDate("A", date);
+        List<KOFICDailyBoxOffice> k = koficDailyBoxOfficeRepository.findByKoficDailyBoxOfficeId_RepNationCdAndKoficDailyBoxOfficeId_TargetDate("K", date);
+        List<KOFICDailyBoxOffice> f = koficDailyBoxOfficeRepository.findByKoficDailyBoxOfficeId_RepNationCdAndKoficDailyBoxOfficeId_TargetDate("F", date);
 
         assertThat(a.size()).isEqualTo(10);
         assertThat(k.size()).isEqualTo(10);
         assertThat(f.size()).isEqualTo(10);
 
-        LocalDate date = LocalDate.parse("20240919", DateTimeFormatter.ofPattern("yyyyMMdd"));
 
         KOFICDailyBoxOffice aRank1 = koficDailyBoxOfficeRepository.findByKoficDailyBoxOfficeId_RepNationCdAndMovieRankAndKoficDailyBoxOfficeId_TargetDate("A", 1, date)
                 .orElseThrow(() -> new RuntimeException("A1 검색된 박스오피스 순위가 없습니다."));
@@ -156,15 +158,15 @@ class KOFICApiServiceTest {
         assertThat(weeklyChkF).isEqualTo("20240922");
         assertThat(weeklyChkK).isEqualTo("20240922");
 
-        List<KOFICWeeklyBoxOffice> a = koficWeeklyBoxOfficeRepository.findByKoficWeeklyBoxOfficeId_RepNationCd("A");
-        List<KOFICWeeklyBoxOffice> k = koficWeeklyBoxOfficeRepository.findByKoficWeeklyBoxOfficeId_RepNationCd("K");
-        List<KOFICWeeklyBoxOffice> f = koficWeeklyBoxOfficeRepository.findByKoficWeeklyBoxOfficeId_RepNationCd("F");
+        LocalDate date = LocalDate.parse("20240916", DateTimeFormatter.ofPattern("yyyyMMdd"));
+
+        List<KOFICWeeklyBoxOffice> a = koficWeeklyBoxOfficeRepository.findByKoficWeeklyBoxOfficeId_RepNationCdAndKoficWeeklyBoxOfficeId_StartDateRange("A", date);
+        List<KOFICWeeklyBoxOffice> k = koficWeeklyBoxOfficeRepository.findByKoficWeeklyBoxOfficeId_RepNationCdAndKoficWeeklyBoxOfficeId_StartDateRange("K", date);
+        List<KOFICWeeklyBoxOffice> f = koficWeeklyBoxOfficeRepository.findByKoficWeeklyBoxOfficeId_RepNationCdAndKoficWeeklyBoxOfficeId_StartDateRange("F", date);
 
         assertThat(a.size()).isEqualTo(10);
         assertThat(k.size()).isEqualTo(10);
         assertThat(f.size()).isEqualTo(10);
-
-        LocalDate date = LocalDate.parse("20240916", DateTimeFormatter.ofPattern("yyyyMMdd"));
 
         KOFICWeeklyBoxOffice aRank1 = koficWeeklyBoxOfficeRepository.findByKoficWeeklyBoxOfficeId_RepNationCdAndMovieRankAndKoficWeeklyBoxOfficeId_StartDateRange("A", 1, date)
                 .orElseThrow(() -> new RuntimeException("A1 검색된 박스오피스 순위가 없습니다."));
