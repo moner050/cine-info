@@ -135,8 +135,9 @@ public class ResultRes {
                 .repRateDate(repRatDate.isEmpty() || repRatDate.length() < 4 ? null : LocalDate.parse(replaceDate(repRatDate), DateTimeFormatter.ofPattern("yyyyMMdd")))
                 .repRlsDate(repRlsDate.isEmpty() || repRlsDate.length() < 4 ? null : LocalDate.parse(replaceDate(repRlsDate), DateTimeFormatter.ofPattern("yyyyMMdd")))
                 .keywords(keywords)
-                .salesAcc(salesAcc != null ? Long.parseLong(salesAcc) : null)
-                .audiAcc(audiAcc != null ? Long.parseLong(audiAcc) : null)
+                // 2024-10-17 현재 KMDb 측에서 주는 누적매출액 및 누적관람객수 데이터가 바뀐 상태로 들어오고 있어서 해당 데이터 서로 바꿔서 넣어주기.
+                .salesAcc(audiAcc != null ? Long.parseLong(audiAcc) : null)
+                .audiAcc(salesAcc != null ? Long.parseLong(salesAcc) : null)
                 .statSource(statSouce)
                 .statDate(statDate.isEmpty() || statDate.length() < 4 ? null : LocalDate.parse(replaceDate(statDate), DateTimeFormatter.ofPattern("yyyyMMdd")))
                 .themeSong(themeSong)
