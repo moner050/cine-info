@@ -71,97 +71,104 @@ public class KMDbApiService {
 
         for (ResultRes resultRes : dataRes.getResult()) {
             taskExecutor.submit(() -> {
-                // 해당 영화 정보가 이미 있으면 건너뛰기
-                if(kmdbMovieInfoRepository.existsById(resultRes.getDOCID())) {
-                    log.info(resultRes.getTitle() + " 영화 정보가 이미 존재합니다.");
-                }
-                else {
-                    // KMDb 영화 정보 저장
-                    KMDbMovieInfo savedEntity = kmdbMovieInfoRepository.save(resultRes.toEntity());
+                try {
+                    // 해당 영화 정보가 이미 있으면 건너뛰기
+                    if (kmdbMovieInfoRepository.existsById(resultRes.getDOCID())) {
+                        log.info(resultRes.getTitle() + " 영화 정보가 이미 존재합니다.");
+                    } else {
+                        // KMDb 영화 정보 저장
+                        KMDbMovieInfo savedEntity = kmdbMovieInfoRepository.save(resultRes.toEntity());
 
-                    // KMDb 영화 줄거리 저장
-                    int plotsListSize = resultRes.getPlots().getPlot().size();
-                    for (int i = 0; i < plotsListSize; i++) {
-                        log.info("plot count : " + (i+1));
-                        kmdbMoviePlotsRepository.save(resultRes.getPlots().getPlot().get(i).toEntity(savedEntity));
-                    }
-
-                    // KMDb 영화 스태프 정보 저장
-                    int staffsListSize = resultRes.getStaffs().getStaff().size();
-                    log.info("total staff count : " + staffsListSize);
-                    for (int i = 0; i < staffsListSize; i++) {
-
-                        StaffRes staffRes = resultRes.getStaffs().getStaff().get(i);
-
-                        // 스태프가 이미 있으면 기존 스태프 데이터 업데이트
-                        Optional<KMDbMovieStaffs> searchStaff = kmdbMovieStaffsRepository
-                                .findByKmdbMovieInfo_MovieIdAndStaffNm(savedEntity.getMovieId(), staffRes.getStaffNm());
-
-                        if(searchStaff.isPresent()) {
-                            StringBuilder newRoleGroup = new StringBuilder();
-                            StringBuilder newRole = new StringBuilder();
-                            StringBuilder newEtc = new StringBuilder();
-                            KMDbMovieStaffs savedMovieStaff = searchStaff.get();
-
-                            if(!savedMovieStaff.getStaffRoleGroup().isBlank()) {
-                                newRoleGroup.append(savedMovieStaff.getStaffRoleGroup()).append(",");
-                            }
-                            newRoleGroup.append(staffRes.getStaffRoleGroup());
-
-                            if(!savedMovieStaff.getStaffRole().isBlank()) {
-                                newRole.append(savedMovieStaff.getStaffRole()).append(",");
-                            }
-                            newRole.append(staffRes.getStaffRole());
-
-                            if(!savedMovieStaff.getStaffEtc().isBlank()) {
-                                newEtc.append(savedMovieStaff.getStaffEtc()).append(",");
-                            }
-                            newEtc.append(staffRes.getStaffEtc());
-
-                            KMDbMovieStaffs newMovieStaffEntity = KMDbMovieStaffs.builder()
-                                    .staffId(savedMovieStaff.getStaffId())
-                                    .kmdbMovieInfo(savedEntity)
-                                    .staffNm(savedMovieStaff.getStaffNm())
-                                    .staffEnNm(savedMovieStaff.getStaffEnNm())
-                                    .staffRoleGroup(newRoleGroup.toString())
-                                    .staffRole(newRole.toString())
-                                    .staffEtc(newEtc.toString())
-                                    .build();
-
-                            kmdbMovieStaffsRepository.save(newMovieStaffEntity);
+                        // KMDb 영화 줄거리 저장
+                        int plotsListSize = resultRes.getPlots().getPlot().size();
+                        for (int i = 0; i < plotsListSize; i++) {
+                            log.info("plot count : " + (i + 1));
+                            kmdbMoviePlotsRepository.save(resultRes.getPlots().getPlot().get(i).toEntity(savedEntity));
                         }
-                        else {
-                            kmdbMovieStaffsRepository.save(staffRes.toEntity(savedEntity));
+
+                        // KMDb 영화 스태프 정보 저장
+                        int staffsListSize = resultRes.getStaffs().getStaff().size();
+                        log.info("total staff count : " + staffsListSize);
+                        for (int i = 0; i < staffsListSize; i++) {
+
+                            StaffRes staffRes = resultRes.getStaffs().getStaff().get(i);
+
+                            // 스태프가 이미 있으면 기존 스태프 데이터 업데이트
+                            Optional<KMDbMovieStaffs> searchStaff = kmdbMovieStaffsRepository
+                                    .findByKmdbMovieInfo_MovieIdAndStaffNm(savedEntity.getMovieId(), staffRes.getStaffNm());
+
+                            if (searchStaff.isPresent()) {
+                                StringBuilder newRoleGroup = new StringBuilder();
+                                StringBuilder newRole = new StringBuilder();
+                                StringBuilder newEtc = new StringBuilder();
+                                KMDbMovieStaffs savedMovieStaff = searchStaff.get();
+
+                                if (!savedMovieStaff.getStaffRoleGroup().isBlank()) {
+                                    newRoleGroup.append(savedMovieStaff.getStaffRoleGroup()).append(",");
+                                }
+                                newRoleGroup.append(staffRes.getStaffRoleGroup());
+
+                                if (!savedMovieStaff.getStaffRole().isBlank()) {
+                                    newRole.append(savedMovieStaff.getStaffRole()).append(",");
+                                }
+                                newRole.append(staffRes.getStaffRole());
+
+                                if (!savedMovieStaff.getStaffEtc().isBlank()) {
+                                    newEtc.append(savedMovieStaff.getStaffEtc()).append(",");
+                                }
+                                newEtc.append(staffRes.getStaffEtc());
+
+                                KMDbMovieStaffs newMovieStaffEntity = KMDbMovieStaffs.builder()
+                                        .staffId(savedMovieStaff.getStaffId())
+                                        .kmdbMovieInfo(savedEntity)
+                                        .staffNm(savedMovieStaff.getStaffNm())
+                                        .staffEnNm(savedMovieStaff.getStaffEnNm())
+                                        .staffRoleGroup(newRoleGroup.toString())
+                                        .staffRole(newRole.toString())
+                                        .staffEtc(newEtc.toString())
+                                        .build();
+
+                                kmdbMovieStaffsRepository.save(newMovieStaffEntity);
+                            } else {
+                                kmdbMovieStaffsRepository.save(staffRes.toEntity(savedEntity));
+                            }
+                        }
+
+                        String[] posters = resultRes.getPosters().split("\\|");
+                        String[] stills = resultRes.getStlls().split("\\|");
+
+                        // KMDb 영화 포스터 URL 링크 정보 저장
+                        for (String url : posters) {
+                            if (url.isBlank()) {
+                                continue;
+                            }
+                            log.info("poster url : " + url);
+                            kmdbMoviePostersRepository.save(resultRes.toPosterEntity(savedEntity, url));
+                        }
+
+                        // KMDb 영화 스틸컷 URL 링크 정보 저장
+                        for (String url : stills) {
+                            if (url.isBlank()) {
+                                continue;
+                            }
+                            log.info("stills url : " + url);
+                            kmdbMovieStillsRepository.save(resultRes.toStillsEntity(savedEntity, url));
+                        }
+
+                        // KMDb 영화 VOD 정보 저장
+                        int vodsListSize = resultRes.getVods().getVod().size();
+                        for (int i = 0; i < vodsListSize; i++) {
+                            VodRes vodRes = resultRes.getVods().getVod().get(i);
+                            if (vodRes.getVodUrl().isBlank()) {
+                                continue;
+                            }
+                            log.info("vod count : " + (i + 1));
+                            kmdbMovieVodsRepository.save(vodRes.toEntity(savedEntity));
                         }
                     }
-
-                    String[] posters = resultRes.getPosters().split("\\|");
-                    String[] stills = resultRes.getStlls().split("\\|");
-
-                    // KMDb 영화 포스터 URL 링크 정보 저장
-                    for (String url : posters) {
-                        if(url.isBlank()) { continue; }
-                        log.info("poster url : " + url);
-                        kmdbMoviePostersRepository.save(resultRes.toPosterEntity(savedEntity, url));
-                    }
-
-                    // KMDb 영화 스틸컷 URL 링크 정보 저장
-                    for (String url : stills) {
-                        if(url.isBlank()) { continue; }
-                        log.info("stills url : " + url);
-                        kmdbMovieStillsRepository.save(resultRes.toStillsEntity(savedEntity, url));
-                    }
-
-                    // KMDb 영화 VOD 정보 저장
-                    int vodsListSize = resultRes.getVods().getVod().size();
-                    for (int i = 0; i < vodsListSize; i++) {
-                        VodRes vodRes = resultRes.getVods().getVod().get(i);
-                        if(vodRes.getVodUrl().isBlank()) { continue; }
-                        log.info("vod count : " + (i+1));
-                        kmdbMovieVodsRepository.save(vodRes.toEntity(savedEntity));
-                    }
+                } finally {
+                    latch.countDown();
                 }
-                latch.countDown();
             });
         }
 
