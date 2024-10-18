@@ -105,9 +105,12 @@ public class KOFICApiService {
 
                 log.info(newTargetDate + " 일간 박스오피스 검색 시작.");
 
-                if(!saveDailyBoxOffice(newTargetDate, repNationCd)) break;
+                boolean saveResult = saveDailyBoxOffice(newTargetDate, repNationCd);
 
                 count = 1;
+
+                if(!saveResult) continue;
+
             }
 
         }
@@ -226,7 +229,7 @@ public class KOFICApiService {
                     i = nextWeekTime;
                 }
                 else {
-                    break;
+                    continue;
                 }
             }
 
