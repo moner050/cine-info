@@ -8,12 +8,14 @@ spring:
     cache: false
     # templates 디렉토리 체크. 파일이 없으면 에러 발생.
     check-template-location: false
+  thymeleaf3:
+    decoupled-logic: true
   jpa:
     hibernate:
       # 엔티티를 보고 자동으로 DDL 문 만들지
       ddl-auto: validate
     # SQL 쿼리문 보여주도록 설정
-    show-sql: true
+    show-sql: false
     properties:
       hibernate:
         # 한줄로 나오는 쿼리문 이쁘게 보여주기
