@@ -22,6 +22,11 @@ spring:
         format_sql: true
         # 복잡한 쿼리를 사용하게 되면, IN QUERY 로 바꿔서 한번에 SELECT 해 가져오기
         default_batch_fetch_size: 100
+  devtools:
+    livereload:
+      enabled: true
+    restart:
+      enabled: true
 
 
 # 디버그 로그 활성화 할껀지
