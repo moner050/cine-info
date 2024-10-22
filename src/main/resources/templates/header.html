@@ -8,11 +8,7 @@
 <header id="header" class="p-3 text-bg-dark">
     <div class="container">
         <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
-            <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
-                <svg class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap"><use xlink:href="#bootstrap"></use></svg>
-            </a>
-
-            <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+            <ul class="nav col-7 col-lg-auto me-lg-auto mb-2 justify-content-center">
                 <li><a id="home" href="#" class="nav-link px-3 text-white">홈</a></li>
                 <li><a id="action" href="#" class="nav-link px-3 text-white">액션</a></li>
                 <li><a id="sf" href="#" class="nav-link px-3 text-white">SF</a></li>
@@ -21,8 +17,28 @@
                 <li><a id="romance" href="#" class="nav-link px-3 text-white">로맨스</a></li>
                 <li><a id="criminal" href="#" class="nav-link px-3 text-white">범죄</a></li>
             </ul>
-            <div class="text-end">
-                <span id="username" class="text-white me-2">사용자이름</span>
+
+            <div class="search-wrap">
+                <div class="col-11">
+                    <div class="row no-gutters">
+                        <div class="col-lg-10 col-md-4 col-sm-11 p-0">
+                            <label for="search-value" hidden></label>
+                            <input type="text" placeholder="영화 제목 또는 장르를 입력해주세요." class="form-control" id="search-value" name="searchValue">
+                        </div>
+                        <div class="col-lg-1 col-md-4 col-sm-11 p-0">
+                            <button type="submit" class="btn btn-dark">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-search">
+                                    <circle cx="11" cy="11" r="8"></circle>
+                                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sign-in-wrap">
+                <a role="button" id="sign-up" class="btn btn-outline-light me-2">회원가입</a>
                 <a role="button" id="login" class="btn btn-outline-light me-2">로그인</a>
                 <a role="button" id="logout" class="btn btn-outline-light me-2">로그아웃</a>
             </div>
